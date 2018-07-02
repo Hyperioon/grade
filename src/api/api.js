@@ -101,9 +101,20 @@ export const getUserInfo = param => {
 export const getRandowExpert = param => {
   return req.get(`${base}/api/project/getRandowExpert`, param).then(res => res.data);
 }
-// 选定专家
+// 选定初评专家
 export const chooseExpert = param => {
   return req.post(`${base}/api/project/chooseExpert`, param).then(res => res.data);
+}
+// 选定终评专家
+export const getAllFinalReviewExpert = param => {
+  return req.get(`${base}/api/getAllFinalReviewExpert`, param).then(res => res.data);
+}
+export const chooseFinalExpert = param => {
+  return req.post(`${base}/api/chooseFinalExpert`, param).then(res => res.data);
+}
+// 修改项目评奖结果
+export const updateFinalScore = param => {
+  return req.post(`${base}/api/project/updateFinalScore`, param).then(res => res.data);
 }
 // 修改专家
 export const updateExpert = param => {
@@ -119,4 +130,12 @@ export const getExpertList = param => {
 // 查询专家
 export const getExpertInfo = param => {
   return req.post(`${base}/api/expert/getExpertInfo`, param).then(res => res.data);
+}
+// 管理员获取终评项目
+export const getAdminProjectList = param => {
+  return req.get(`${base}/api/leader/getAdminProjectList`, param).then(res => res.data);
+}
+// 终评专家获取终评项目
+export const getExpertProjectList = param => {
+  return req.get(`${base}/api/leader/getExpertProjectList`, param).then(res => res.data);
 }

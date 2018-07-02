@@ -16,6 +16,7 @@
       <el-input type="password"
                 v-model="ruleForm2.checkPass"
                 auto-complete="off"
+                @keyup.enter.native="handleSubmit2"
                 placeholder="密码"></el-input>
     </el-form-item>
 

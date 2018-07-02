@@ -29,8 +29,10 @@
                        label="打分"
                        width="100">
         <template slot-scope="scope">
-          <el-input type="text"
-                    size="small"
+          <el-input size="small"
+                    type="number"
+                    min="0"
+                    @blur="dafen(scope.row)"
                     v-model="scope.row.rating"></el-input>
         </template>
       </el-table-column>
@@ -64,8 +66,11 @@
                        label="打分"
                        width="100">
         <template slot-scope="scope">
-          <el-input type="text"
+          <el-input rules="rules"
                     size="small"
+                    min="0"
+                    type="number"
+                    @blur="dafen(scope.row)"
                     v-model="scope.row.rating"></el-input>
         </template>
       </el-table-column>
@@ -175,6 +180,18 @@ export default {
     }
   },
   methods: {
+    dafen(value) {
+      console.log(value.rating)
+      if (value.rating === '') {
+        this.$message.error('请按照要求打分');
+      }
+      if (value.rating < 0) {
+        this.$message.error('分数不能为负数！');
+      }
+      if (value.rating > value.name) {
+        this.$message.error('分数大于满分！');
+      }
+    },
     getProject() {
       let param = {
         projectId: this.params.projectId
@@ -230,6 +247,14 @@ export default {
 <style lang='scss' scoped>
 .expert-rating {
   padding: 40px 40px 0 40px;
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0;
+  }
   .item {
     line-height: 28px;
     border-bottom: 1px solid #dfe6ec;

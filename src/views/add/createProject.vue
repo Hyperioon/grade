@@ -30,6 +30,9 @@
         <el-select class="lang"
                    v-model="project.unionDepartment1"
                    placeholder="没有可不选">
+          <el-option label="请选择"
+                     value="">
+          </el-option>
           <el-option v-for="item in allDepartment"
                      :key="item.description"
                      :label="item.description"
@@ -41,6 +44,9 @@
         <el-select class="lang"
                    v-model="project.unionDepartment2"
                    placeholder="没有可不选">
+          <el-option label="请选择"
+                     value="">
+          </el-option>
           <el-option v-for="item in allDepartment"
                      :key="item.description"
                      :label="item.description"
@@ -437,6 +443,8 @@ export default {
             let obj = {};
             for (let i = 0; i < fileArr.length; i++) {
               obj.name = fileArr[i];
+              let index = fileArr[i].indexOf('/');
+              obj.name = fileArr[i].slice(index + 1);
               obj.url = fileArr[i];
               this.uploadFiles.push(obj);
             }
@@ -448,6 +456,8 @@ export default {
           let shenbaoObj = {}
           for (let i = 0; i < shenbaoArr.length; i++) {
             shenbaoObj.name = shenbaoArr[i];
+            let index = shenbaoArr[i].indexOf('/');
+            shenbaoObj.name = shenbaoArr[i].slice(index + 1);
             shenbaoObj.url = shenbaoArr[i];
             this.shenbaoFile.push(shenbaoObj);
           }

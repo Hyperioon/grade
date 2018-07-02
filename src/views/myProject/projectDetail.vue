@@ -53,11 +53,11 @@
         <span>{{project.introduction}}</span>
       </el-form-item>
       <el-form-item label='申报书'>
-        <a :href="'/api/project/zipfileDownload?fileNames='+project.application">{{project.application}}</a>
+        <a :href="'/api/download?fileName='+project.application">{{application}}</a>
       </el-form-item>
       <el-form-item label='证明材料'
                     v-show="project.projectClass === 2">
-        <a :href="'/api/project/zipfileDownload?fileNames='+project.material">{{project.material}}</a>
+        <a :href="'/api/download?fileName='+project.material">{{material}}</a>
       </el-form-item>
     </el-form>
     <el-button class="back" @click="$router.go(-1)">返回</el-button>
@@ -74,6 +74,8 @@ export default {
   },
   data() {
     return {
+      application: '',
+      material: '',
       contact: [],
       project: {
         projectClass: 2,
@@ -99,6 +101,10 @@ export default {
           Object.assign(this.project, res.result);
           this.applyList = this.project.applyUser.split(',');
           this.contact = this.project.contact.split(',');
+          let index = this.project.application.indexOf('/');
+          this.application = this.project.application.slice(index+1);
+          let item = this.project.material.indexOf('/');
+          this.material = this.project.material.slice(item+1);
         } else {
           Message({
             message: res.message,

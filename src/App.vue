@@ -29,6 +29,13 @@ body {
   font-size: 14px;
   -webkit-font-smoothing: antialiased;
 }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
 .pagination {
   margin-top: 20px;
 }

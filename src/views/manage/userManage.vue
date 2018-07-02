@@ -54,7 +54,7 @@
           </el-button>
           <el-button @click.native.prevent="addExpert(scope.row)"
                      type="text"
-                     v-show="!scope.row.expert"
+                     v-show="!scope.row.expert || scope.row.expert.deleted === 1"
                      size="small">
             添加到专家库
           </el-button>

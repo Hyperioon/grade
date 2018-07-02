@@ -100,6 +100,12 @@
                          width="140"
                          label="状态">
         </el-table-column>
+        <el-table-column prop="finalScore"
+                         :formatter="formatFinal"
+                         align="center"
+                         width="180"
+                         label="结果">
+        </el-table-column>
 
         <el-table-column fixed="right"
                          label="操作"
@@ -171,6 +177,17 @@ export default {
     handleCurrentChange(val) {
       this.project.pageNo = val;
       this.getAllProjectList();
+    },
+    formatFinal(data) {
+      if (data.finalScope === 1) {
+        return '一等奖';
+      } else if (data.finalScope === 2) {
+        return '二等奖';
+      } else if (data.finalScope === 3) {
+        return '三等奖';
+      } else {
+        return '淘汰';
+      }
     },
     formatClass(data) {
       if (data.projectClass === 1) {

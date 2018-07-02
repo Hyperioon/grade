@@ -71,80 +71,61 @@
                        size="small">
               详情
             </el-button>
-            <el-button @click.native.prevent="gradeDetail(scope.row)"
-                       type="text"
-                       v-show="scope.row.juniorStatus === 2"
-                       size="small">
-              打分情况
-            </el-button>
             <el-button @click.native.prevent="download(scope.row)"
                        type="text"
                        size="small">
               下载
             </el-button>
+            <el-button @click.native.prevent="fenpei(scope.row)"
+                       type="text"
+                       size="small">
+              分配终评专家
+            </el-button>
+            <el-button @click.native.prevent="pingjiang(scope.row)"
+                       type="text"
+                       size="small">
+              评奖
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
-      <!-- 分数弹窗 -->
-      <el-dialog title="打分情况"
-                 v-show="fenshu.projectClass === 1"
-                 :visible.sync="fenshuShow"
-                 width="30%">
-        <el-form ref="form"
-                 :model="fenshu"
-                 label-position="left"
-                 label-width="100px">
-          <el-form-item label="实用性">
-            <span>{{fenshu.firstScore}}分</span>
-          </el-form-item>
-          <el-form-item label="效益性">
-            <span>{{fenshu.secondScore}}分</span>
-          </el-form-item>
-          <el-form-item label="先进性">
-            <span>{{fenshu.thirdScore}}分</span>
-          </el-form-item>
-          <el-form-item label="示范性">
-            <span>{{fenshu.forthScore}}分</span>
-          </el-form-item>
-          <el-form-item label="总分">
-            <span>{{fenshu.totalScore}}分</span>
-          </el-form-item>
-        </el-form>
-        <span slot="footer"
-              class="dialog-footer">
+      <el-dialog title="随机分配专家"
+                 :visible.sync="fenpeiShow">
+        <el-table :data="expertList"
+                  v-loading="loading">
+          <el-table-column property="name"
+                           label="姓名"
+                           width="150"></el-table-column>
+          <el-table-column property="department"
+                           label="部门"
+                           width="200"></el-table-column>
+          <el-table-column property="mobile"
+                           label="手机"></el-table-column>
+        </el-table>
+        <div slot="footer"
+             class="dialog-footer">
+          <!-- <el-button @click="getExpert">重新随机分配</el-button> -->
           <el-button type="primary"
-                     @click="fenshuShow = false">确 定</el-button>
-        </span>
+                     @click="sure">确 定</el-button>
+        </div>
       </el-dialog>
-      <el-dialog title="打分情况"
-                 v-show="fenshu.projectClass === 2"
-                 :visible.sync="fenshuShow"
-                 width="30%">
-        <el-form ref="form"
-                 :model="fenshu"
-                 label-position="left"
-                 label-width="100px">
-          <el-form-item label="创新性">
-            <span>{{fenshu.firstScore}}分</span>
-          </el-form-item>
-          <el-form-item label="自主性">
-            <span>{{fenshu.secondScore}}分</span>
-          </el-form-item>
-          <el-form-item label="效益性">
-            <span>{{fenshu.thirdScore}}分</span>
-          </el-form-item>
-          <el-form-item label="可推广性">
-            <span>{{fenshu.forthScore}}分</span>
-          </el-form-item>
-          <el-form-item label="总分">
-            <span>{{fenshu.totalScore}}分</span>
-          </el-form-item>
-        </el-form>
-        <span slot="footer"
-              class="dialog-footer">
+      <!-- 评奖 -->
+      <el-dialog title="评奖"
+                 :visible.sync="pingjiangShow">
+        <el-radio v-model="finalScore"
+                  label="1">一等奖</el-radio>
+        <el-radio v-model="finalScore"
+                  label="2">二等奖</el-radio>
+        <el-radio v-model="finalScore"
+                  label="3">三等奖</el-radio>
+        <el-radio v-model="finalScore"
+                  label="0">淘汰</el-radio>
+        <div slot="footer"
+             class="dialog-footer">
+          <!-- <el-button @click="getExpert">重新随机分配</el-button> -->
           <el-button type="primary"
-                     @click="fenshuShow = false">确 定</el-button>
-        </span>
+                     @click="sure">确 定</el-button>
+        </div>
       </el-dialog>
       <div class="pagination">
         <el-pagination @current-change="handleCurrentChange"
@@ -157,20 +138,26 @@
 </template>
 
 <script>
-import { getProjectList, getDepartment, approve, getUserInfo } from '@/api/api';
+import { getProjectList, updateFinalScore, chooseFinalExpert, getAllFinalReviewExpert, getDepartment, approve, getUserInfo } from '@/api/api';
 export default {
   name: 'approve',
   components: {
   },
   data() {
     return {
+      fenpeiShow: false,
+      finalScore: '',
+      pingjiangShow: false,
       userRole: 0,
+      loading: false,
+      expertList: [],
       rejectReason: '',
       listLoading: false,
       fenshuShow: false,
       allDepartment: [],
       total: 0,
       fenshu: {},
+      projectId: '',
       approveParam: {
         projectId: '',
         mark: 0,
@@ -206,6 +193,37 @@ export default {
       } else {
         return '创新项目奖';
       }
+    },
+    fenpei(row) {
+      this.projectId = row.id;
+      this.getExpert();
+      this.fenpeiShow = true;
+    },
+    getExpert() {
+      this.loading = true;
+      getAllFinalReviewExpert({ projectId: this.projectId }).then(res => {
+        this.expertList = res.result;
+        setTimeout(() => {
+          this.loading = false;
+        }, 1000)
+      })
+    },
+    sure() {
+      let param = {
+        id: this.projectId,
+        finalScore: this.finalScore
+      }
+      updateFinalScore(param).then(res => {
+        if (res.resultCode === '200') {
+          this.$message.success("成功");
+          this.getAllProjectList();
+          this.pingjiangShow = false;
+        }
+      })
+    },
+    pingjiang(row) {
+      this.projectId = row.id;
+      this.pingjiangShow = true;
     },
     grade(row) {
       this.$router.push({ path: '/expertRating', query: { id: row.id } })
