@@ -181,15 +181,25 @@ export default {
   },
   methods: {
     dafen(value) {
-      console.log(value.rating)
-      if (value.rating === '') {
-        this.$message.error('请按照要求打分');
-      }
-      if (value.rating < 0) {
-        this.$message.error('分数不能为负数！');
-      }
-      if (value.rating > value.name) {
-        this.$message.error('分数大于满分！');
+      const val = value.rating;
+      console.log(value.name)
+      console.log(val)
+
+      if (val) {
+        if (val.indexOf(".") != -1 && val.substring(val.indexOf(".") + 1, val.length).length > 2) {
+          this.$message.error('小数点后最多两位！');
+        }
+        if (val === '') {
+          this.$message.error('请按照要求打分！');
+        }
+        if (val < 0) {
+          this.$message.error('分数不能为负数！');
+        }
+        let rating = parseInt(value.rating);
+        let name = parseInt(value.name)
+        if (rating > name) {
+          this.$message.error('分数大于满分！');
+        }
       }
     },
     getProject() {

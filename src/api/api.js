@@ -28,9 +28,9 @@ export const getProjectList = param => {
 export const getMyProjectList = param => {
   return req.post(`${base}/api/visit/getMyProjectList`, param).then(res => res.data);
 }
-// 专家获取项目
+// 初评专家获取项目
 export const getExpertProjectListByCondition = param => {
-  return req.get(`${base}/api/project/getExpertProjectListByCondition`, param).then(res => res.data);
+  return req.get(`${base}/api/expert/getExpertProjectListByCondition`, param).then(res => res.data);
 }
 // 获取专家打分分数
 export const getExpertScore = param => {
@@ -42,7 +42,7 @@ export const getGradedProjectList = param => {
 }
 // 管理员所有项目
 export const getAdminProjectListByCondition = param => {
-  return req.get(`${base}/api/project/getAdminProjectListByCondition`, param).then(res => res.data);
+  return req.get(`${base}/api/expert/getAdminProjectListByCondition`, param).then(res => res.data);
 }
 // 获取项目详情
 export const getProjectInfo = param => {
@@ -51,6 +51,10 @@ export const getProjectInfo = param => {
 // 通过部门选择员工
 export const getUsersByDepartment = param => {
   return req.get(`${base}/api/ucenter/getUsersByDepartment`, param).then(res => res.data);
+}
+// 终评批量打分
+export const batchGrade = param => {
+  return req.post(`${base}/api/batchGrade`, param).then(res => res.data);
 }
 //  下载多文件
 export const zipfileDownload = param => {
@@ -109,6 +113,9 @@ export const chooseExpert = param => {
 export const getAllFinalReviewExpert = param => {
   return req.get(`${base}/api/getAllFinalReviewExpert`, param).then(res => res.data);
 }
+export const zhongpingList = param => {
+  return req.get(`${base}/api/leader/getExpertProjectListByCondition`, param).then(res => res.data);
+}
 export const chooseFinalExpert = param => {
   return req.post(`${base}/api/chooseFinalExpert`, param).then(res => res.data);
 }
@@ -133,7 +140,7 @@ export const getExpertInfo = param => {
 }
 // 管理员获取终评项目
 export const getAdminProjectList = param => {
-  return req.get(`${base}/api/leader/getAdminProjectList`, param).then(res => res.data);
+  return req.get(`${base}/api/leader/getAdminProjectListByCondition`, param).then(res => res.data);
 }
 // 终评专家获取终评项目
 export const getExpertProjectList = param => {

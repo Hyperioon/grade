@@ -194,11 +194,11 @@ export default {
   },
   methods: {
     onExport() {
-      window.open(`/api/project/getExpertProjectListByCondition?projectClass=${this.project.projectClass}&action=1&pageNo=1`);
+      window.open(`/api/expert/getExpertProjectListByCondition?projectClass=${this.project.projectClass}&action=1&pageNo=1`);
     },
     downResourse() {
       if (this.projectList.length > 0) {
-        window.open(`/api/project/getExpertProjectZip?projectClass=${this.project.projectClass}`);
+        window.open(`/api/expert/getExpertProjectListByCondition?projectClass=${this.project.projectClass}&action=3`);
       } else {
         this.$message.error('暂无文件');
       }

@@ -4,7 +4,8 @@
       <el-form :inline="true"
                :model="project"
                class="demo-form-inline">
-        <el-form-item label="部门">
+        <el-form-item label="部门"
+                      v-show="userRole === 2 || userRole === 3">
           <el-select clearable
                      v-model="project.applyDepartment"
                      placeholder="请选择申报部门">
@@ -106,6 +107,16 @@
                          width="180"
                          label="结果">
         </el-table-column>
+        <el-table-column prop="expertFinalScore"
+                         align="center"
+                         width="180"
+                         label="初评得分">
+        </el-table-column>
+        <el-table-column prop="leaderFinalScore"
+                         align="center"
+                         width="180"
+                         label="终评得分">
+        </el-table-column>
 
         <el-table-column fixed="right"
                          label="操作"
@@ -185,8 +196,10 @@ export default {
         return '二等奖';
       } else if (data.finalScope === 3) {
         return '三等奖';
-      } else {
+      } else if (data.finalScope === 0) {
         return '淘汰';
+      } else {
+        return '';
       }
     },
     formatClass(data) {

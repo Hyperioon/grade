@@ -16,6 +16,7 @@ const  alloted = r => require.ensure( [], () => r (require('./views/myProject/al
 const  zhongping = r => require.ensure( [], () => r (require('./views/myProject/zhongping.vue')));
 const  yichuping = r => require.ensure( [], () => r (require('./views/myProject/yichuping.vue')));
 const  chuping = r => require.ensure( [], () => r (require('./views/myProject/chuping.vue')));
+const  zhongpingDafen = r => require.ensure( [], () => r (require('./views/myProject/zhongpingDafen.vue')));
 const  expertDafen = r => require.ensure( [], () => r (require('./views/myProject/expertDafen.vue')));
 const  pingjiang = r => require.ensure( [], () => r (require('./views/myProject/pingjiang.vue')));
 const  approve = r => require.ensure( [], () => r (require('./views/myProject/approve.vue')));
@@ -73,7 +74,8 @@ let routes = [
             { path: '/manageApprove', component: manageApprove, name: '待审批项目', hidden: true },
             { path: '/allProject', component: allProject, name: '全部项目', hidden: true },
             { path: '/chuping', component: chuping, name: '初评项目', hidden: true },
-            { path: '/expertDafen', component: expertDafen, name: '专家打分情况', hidden: true },
+            { path: '/expertDafen', component: expertDafen, name: '初评打分情况', hidden: true },
+            { path: '/zhongpingDafen', component: zhongpingDafen, name: '终评打分情况', hidden: true },
             { path: '/yichuping', component: yichuping, name: '已初评项目', hidden: true },
             { path: '/fenpei', component: fenpei, name: '待分配项目', hidden: true },
             { path: '/alloted', component: alloted, name: '已分配项目', hidden: true },

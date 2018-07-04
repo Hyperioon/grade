@@ -28,15 +28,18 @@
                 style="width: 100%">
         <el-table-column prop="name"
                          label="项目名称"
+                         width="260"
                          align="center">
         </el-table-column>
         <el-table-column prop="projectClass"
                          align="center"
                          label="类型"
+                         width="160"
                          :formatter="formatClass">
         </el-table-column>
         <el-table-column prop="applyDepartment"
                          align="center"
+                         width="160"
                          label="部门">
         </el-table-column>
         <el-table-column align="left"
@@ -50,20 +53,24 @@
         </el-table-column>
         <el-table-column prop="field"
                          align="center"
+                         width="160"
                          label="领域">
         </el-table-column>
 
         <el-table-column prop="status"
                          align="center"
+                         width="160"
                          :formatter="formatStatus"
                          label="状态">
         </el-table-column>
         <el-table-column prop="departView"
                          align="center"
-                         label='部门审批人意见'>
+                         width="360"
+                         label='部门意见'>
         </el-table-column>
         <el-table-column prop="managerView"
                          align="center"
+                         width="360"
                          label='管理员意见'>
         </el-table-column>
 

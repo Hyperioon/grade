@@ -69,26 +69,29 @@
                             @click="$router.push('/manageApprove')">待审批项目</el-menu-item>
               <el-menu-item v-if="user.role === 3"
                             index="./fenpei"
-                            @click="$router.push('/fenpei')">待分配专家项目</el-menu-item>
+                            @click="$router.push('/fenpei')">分配初评专家</el-menu-item>
               <!-- 专家 -->
               <el-menu-item v-if="user.expert && user.expert.juniorExpert === 1"
                             index="/chuping"
                             @click="$router.push('/chuping')">初评项目</el-menu-item>
               <el-menu-item v-if="user.role === 3"
                             index="/expertDafen"
-                            @click="$router.push('/expertDafen')">专家打分情况</el-menu-item>
+                            @click="$router.push('/expertDafen')">初评打分情况</el-menu-item>
               <!-- <el-menu-item v-if="user.role === 3"
                             index="./alloted"
                             @click="$router.push('/alloted')">已分配专家项目</el-menu-item> -->
-              <el-menu-item v-if="user.role === 3 || user.expert && user.expert.juniorExpert === 1"
+              <el-menu-item v-if="user.role === 3"
                             index="/yichuping"
                             @click="$router.push('/yichuping')">已初评项目</el-menu-item>
-              <el-menu-item v-if="user.role === 3"
+              <el-menu-item v-if="user.expert && user.expert.finalExpert === 1"
                             index="/zhongping"
-                            @click="$router.push('/zhongping')">待终评项目</el-menu-item>
+                            @click="$router.push('/zhongping')">终评项目</el-menu-item>
+              <el-menu-item v-if="user.role === 3"
+                            index="/zhongpingDafen"
+                            @click="$router.push('/zhongpingDafen')">终评打分情况</el-menu-item>
               <el-menu-item v-if="user.role === 3"
                             index="/pingjiang"
-                            @click="$router.push('/pingjiang')">待评奖项目</el-menu-item>
+                            @click="$router.push('/pingjiang')">已终评项目</el-menu-item>
               <el-menu-item v-if="user.role === 3"
                             index="/allProject"
                             @click="$router.push('/allProject')">所有项目</el-menu-item>

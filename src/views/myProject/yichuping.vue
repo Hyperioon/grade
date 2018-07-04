@@ -209,15 +209,21 @@ export default {
       })
     },
     sure() {
-      let param = {
-        id: this.projectId,
-        finalScore: this.finalScore
+      let arr = [];
+      for(let item of this.expertList) {
+        arr.push(item.id);
       }
-      updateFinalScore(param).then(res => {
+      arr = arr.join(',');
+      let param = {
+        projectId: this.projectId,
+        userIds: arr
+      }
+      console.log(param)
+      chooseFinalExpert(param).then(res => {
         if (res.resultCode === '200') {
           this.$message.success("成功");
           this.getAllProjectList();
-          this.pingjiangShow = false;
+          this.fenpeiShow = false;
         }
       })
     },

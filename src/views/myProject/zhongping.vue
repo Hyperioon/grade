@@ -30,7 +30,7 @@
                 border
                 v-loading="listLoading"
                 style="width: 100%">
-        <el-table-column prop="name"
+        <el-table-column prop="projectname"
                          label="项目名称"
                          align="center"
                          width="180">
@@ -61,15 +61,7 @@
                          label="领域">
         </el-table-column>
 
-        <el-table-column prop="status"
-                         align="center"
-                         :formatter="formatStatus"
-                         width="140"
-                         label="状态">
-        </el-table-column>
-
-        <el-table-column fixed="right"
-                         label="操作"
+        <el-table-column label="操作"
                          align="center"
                          width="200">
           <template slot-scope="scope">
@@ -98,6 +90,18 @@
             </el-button>
           </template>
         </el-table-column>
+        <el-table-column fixed="right"
+                         label="打分"
+                         align="center"
+                         width="200">
+          <template slot-scope="scope">
+            <el-input placeholder="输入1-100的整数"
+                      @blur="dafen(scope.row)"
+                      type="number"
+                      v-model="scope.row.leaderScore"
+                      size="small"></el-input>
+          </template>
+        </el-table-column>
       </el-table>
       <!-- 驳回弹窗 -->
       <el-dialog title="驳回意见"
@@ -112,6 +116,10 @@
                      @click="ensuerReject">确 定</el-button>
         </span>
       </el-dialog>
+      <div class="button-wrap">
+        <el-button @click="submit(1)">保存</el-button>
+        <el-button type="primary" @click="submit(2)">提交</el-button>
+      </div>
       <div class="pagination">
         <el-pagination @current-change="handleCurrentChange"
                        layout="total, prev, pager, next"
@@ -123,9 +131,9 @@
 </template>
 
 <script>
-import { getProjectList, getDepartment, approve, getUserInfo } from '@/api/api';
+import { zhongpingList, getDepartment, batchGrade, getUserInfo } from '@/api/api';
 export default {
-  name: 'approve',
+  name: 'zhongping',
   components: {
   },
   data() {
@@ -145,18 +153,19 @@ export default {
         applyDepartment: '',
         projectClass: '',
         status: 6,
-        pageNo: 1
+        pageNo: 1,
+        action: 2
       },
       projectList: [],
     };
   },
   methods: {
     onExport() {
-      window.open(`/api/project/exportMyProjectExcel/?applyDepartment=${this.project.applyDepartment}&projectClass=${this.project.projectClass}&status=${this.project.status}`);
+      window.open(`/api/leader/getExpertProjectListByCondition/?projectClass=${this.project.projectClass}&action=3`);
     },
     downResourse() {
       if (this.projectList.length > 0) {
-        window.open(`/api/project/downZip?applyDepartment=${this.project.applyDepartment}&projectClass=${this.project.projectClass}&status=${this.project.status}&myProject=1`);
+        window.open(`/api/leader/getExpertProjectListByCondition?projectClass=${this.project.projectClass}&action=3`);
       } else {
         this.$message.error('暂无文件');
       }
@@ -172,49 +181,48 @@ export default {
         return '创新项目奖';
       }
     },
-    formatStatus(data) {
-      switch (data.status) {
-        case 0:
-          return '草稿';
-          break;
-        case 1:
-          return '部门审批';
-          break;
-        case 2:
-          return '形式审查';
-          break;
-        case 3:
-          return '待分配专家';
-          break;
-        case 4:
-          return '初评';
-          break;
-        case 5:
-          return '已初评';
-          break;
-        case 6:
-          return '终评';
-          break;
-        case 7:
-          return '结果';
-          break;
-        case 8:
-          return '驳回';
-          break;
-        default:
-          return '获奖'
-      }
-    },
     getAllDepartment() {
       getDepartment().then(res => {
         this.allDepartment = res.result;
       })
     },
     detail(row) {
-      this.$router.push({path: '/projectDetail', query: {id: row.id}});
+      this.$router.push({ path: '/projectDetail', query: { id: row.id } });
+    },
+    dafen(row) {
+      let leaderScore = parseInt(row.leaderScore);
+      console.log(leaderScore)
+      if (leaderScore > 100 || leaderScore < 0) {
+        this.$message.error('分数不符合要求！');
+      }
+    },
+    submit(action) {
+      let arr = [];
+      let ids = [];
+      let projectIds = [];
+      for (let item of this.projectList) {
+        if (!item.leaderScore) {
+          item.leaderScore = 'noScore'
+        }
+        arr.push(item.leaderScore);
+        ids.push(item.id);
+        projectIds.push(item.projectId);
+      }
+      let param = {
+        ids: ids.join(','),
+        projectIds: projectIds.join(','),
+        leaderScores: arr.join(','),
+        finalStatus: action
+      }
+      batchGrade(param).then(res => {
+        if (res.successSign) {
+          this.$message.success('操作成功～');
+          this.getAllProjectList();
+        }
+      })
     },
     getAllProjectList() {
-      getProjectList(this.project).then(res => {
+      zhongpingList(this.project).then(res => {
         if (res.successSign && res.result) {
           this.projectList = res.result.slice(res.pageVo.pageStartRow, res.pageVo.pageEndRow);
           for (let item of this.projectList) {
@@ -230,8 +238,8 @@ export default {
     getUser() {
       getUserInfo().then(res => {
         this.userRole = res.result.role;
+        console.log(this.userRole)
       })
-
     },
     edit(row) {
       this.$router.push({ name: '创建项目', params: { projectId: row.id, projectClass: row.projectClass } });
@@ -289,5 +297,8 @@ export default {
 <style lang='scss'>
 .my-project {
   padding: 40px;
+  .button-wrap {
+    margin: 20px;
+  }
 }
 </style>

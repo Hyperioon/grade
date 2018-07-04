@@ -5,8 +5,7 @@
                :model="project"
                class="demo-form-inline">
         <el-form-item label="类型">
-          <el-select clearable
-                     @change="getAllProjectList"
+          <el-select @change="getAllProjectList"
                      v-model="project.projectClass"
                      placeholder="类型">
             <el-option label="创新项目奖"
@@ -46,13 +45,13 @@
                          label="效益专家"
                          align="center"
                          :formatter="formatBenefit"
-                         width="180">
+                         width="100">
         </el-table-column>
         <el-table-column prop="technology"
                          label="技术专家"
                          :formatter="formatTec"
                          align="center"
-                         width="180">
+                         width="100">
         </el-table-column>
         <el-table-column prop="projectname"
                          label="项目名称"
@@ -64,30 +63,34 @@
                          width="180"
                          label="申报部门">
         </el-table-column>
-        <el-table-column prop="field"
-                         align="center"
-                         width="140"
-                         label="领域">
+        <el-table-column align="center"
+                         width="340"
+                         label="主要完成人">
+          <template scope="scope">
+            <div v-for="item in scope.row.applyUser">
+              <div>{{item}}</div>
+            </div>
+          </template>
         </el-table-column>
         <el-table-column prop="firstScore"
                          align="center"
                          label="创新性"
-                         width="180">
+                         width="100">
         </el-table-column>
         <el-table-column prop="secondScore"
                          align="center"
                          label="自主性"
-                         width="180">
+                         width="100">
         </el-table-column>
         <el-table-column prop="thirdScore"
                          align="center"
                          label="效益性"
-                         width="180">
+                         width="100">
         </el-table-column>
         <el-table-column prop="forthScore"
                          align="center"
                          label="可推广性"
-                         width="180">
+                         width="100">
         </el-table-column>
         <el-table-column prop="totalScore"
                          align="center"
@@ -149,13 +152,13 @@
                          label="效益专家"
                          align="center"
                          :formatter="formatBenefit"
-                         width="180">
+                         width="100">
         </el-table-column>
         <el-table-column prop="technology"
                          label="技术专家"
                          :formatter="formatTec"
                          align="center"
-                         width="180">
+                         width="100">
         </el-table-column>
         <el-table-column prop="projectname"
                          label="项目名称"
@@ -167,30 +170,34 @@
                          width="180"
                          label="申报部门">
         </el-table-column>
-        <el-table-column prop="field"
-                         align="center"
-                         width="140"
-                         label="领域">
+        <el-table-column align="center"
+                         width="340"
+                         label="主要完成人">
+          <template scope="scope">
+            <div v-for="item in scope.row.applyUser">
+              <div>{{item}}</div>
+            </div>
+          </template>
         </el-table-column>
         <el-table-column prop="firstScore"
                          align="center"
                          label="实用性"
-                         width="180">
+                         width="100">
         </el-table-column>
         <el-table-column prop="secondScore"
                          align="center"
                          label="效益性"
-                         width="180">
+                         width="100">
         </el-table-column>
         <el-table-column prop="thirdScore"
                          align="center"
                          label="先进性"
-                         width="180">
+                         width="100">
         </el-table-column>
         <el-table-column prop="forthScore"
                          align="center"
                          label="示范性"
-                         width="180">
+                         width="100">
         </el-table-column>
         <el-table-column prop="totalScore"
                          align="center"
@@ -207,7 +214,7 @@
         <el-table-column fixed="right"
                          label="操作"
                          align="center"
-                         width="240">
+                         width="3">
           <template slot-scope="scope">
             <el-button @click.native.prevent="detail(scope.row)"
                        type="text"
@@ -277,15 +284,16 @@ export default {
         action: 2
       },
       projectList: [],
+      applyList: []
     };
   },
   methods: {
     onExport() {
-      window.open(`/api/project/getAdminProjectListByCondition?projectClass=${this.project.projectClass}&action=1&pageNo=1`);
+      window.open(`/api/expert/getAdminProjectListByCondition?projectClass=${this.project.projectClass}&action=1&pageNo=1`);
     },
     downResourse() {
       if (this.projectList.length > 0) {
-        window.open(`/api/project/getAdminProjectZip?projectClass=${this.project.projectClass}`);
+        window.open(`/api/expert/getAdminProjectListByCondition?projectClass=${this.project.projectClass}&action=3`);
       } else {
         this.$message.error('暂无文件');
       }
@@ -370,6 +378,9 @@ export default {
       getAdminProjectListByCondition(this.project).then(res => {
         if (res.successSign && res.result) {
           this.projectList = res.result.slice(res.pageVo.pageStartRow, res.pageVo.pageEndRow);
+          for (let item of this.projectList) {
+            item.applyUser = item.applyUser.split(',');
+          }
           setTimeout(() => {
             this.listLoading = false;
           }, 500)

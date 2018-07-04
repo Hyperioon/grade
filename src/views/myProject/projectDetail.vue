@@ -100,6 +100,7 @@ export default {
         if (res.successSign) {
           Object.assign(this.project, res.result);
           this.applyList = this.project.applyUser.split(',');
+          console.log(this.applyList);
           this.contact = this.project.contact.split(',');
           let index = this.project.application.indexOf('/');
           this.application = this.project.application.slice(index+1);

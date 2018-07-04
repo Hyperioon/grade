@@ -28,11 +28,10 @@
       </el-form-item>
       <el-form-item label="联合部门1">
         <el-select class="lang"
+                   clearable
                    v-model="project.unionDepartment1"
                    placeholder="没有可不选">
-          <el-option label="请选择"
-                     value="">
-          </el-option>
+
           <el-option v-for="item in allDepartment"
                      :key="item.description"
                      :label="item.description"
@@ -42,11 +41,10 @@
       </el-form-item>
       <el-form-item label="联合部门2">
         <el-select class="lang"
+                   clearable
                    v-model="project.unionDepartment2"
                    placeholder="没有可不选">
-          <el-option label="请选择"
-                     value="">
-          </el-option>
+
           <el-option v-for="item in allDepartment"
                      :key="item.description"
                      :label="item.description"
@@ -98,7 +96,6 @@
         <el-select class='applyUser'
                    v-model="contactInfo"
                    filterable
-                   default-first-option
                    placeholder="评奖过程中日常事务的联系人，1人即可">
           <el-option v-for="item in baojiangren"
                      :key="item"
@@ -152,6 +149,7 @@
       <el-form-item label="任务来源"
                     v-show="project.projectClass === 2">
         <el-input class="desc lang"
+                  :maxlength="300"
                   type="textarea"
                   placeholder="按“年份，项目类别，研发计划内项目名称”格式填写。多个项目联合报奖的，请列出全部项目，项目名称要求来源项目管理系统"
                   v-model="project.relevance"></el-input>
@@ -166,6 +164,7 @@
       <el-form-item label="成果简介">
         <el-input class="desc lang"
                   type="textarea"
+                  :maxlength="300"
                   placeholder="简要描述该革新成果拟解决的实际工作问题、交付物及创新点、应用效果等，不超过300字"
                   v-model="project.introduction"></el-input>
       </el-form-item>
@@ -337,17 +336,9 @@ export default {
       })
     },
     chooseDepartment($event, index) {
-      // 报奖联系人
-      if (index === -1) {
-        this.contactInfo = '';
-      } else { // 完成人
-        // this.applyList[index].info = '';
-        // console.log($event)
-        this.departmentList[index] = $event;
-      }
+      this.departmentList[index] = $event;
     },
     baojiang($event) {
-      this.contactInfo = '';
       let params = {
         department: $event
       }
@@ -424,6 +415,7 @@ export default {
           // 报奖联系人信息拼接
           this.contactDep = this.project.contact.substring(0, index);
           this.contactInfo = this.project.contact.substring(index + 1);
+          console.log(this.contactInfo);
           // 完成人拼接
           let arr = this.project.applyUser.split(',');
           let indexList = [];
@@ -470,7 +462,7 @@ export default {
       })
     },
     onSubmit(status) {
-      this.project.contact = `${this.contactDep}-${this.contactInfo}`;
+      this.project.contact = `${this.contactDep} - ${this.contactInfo}`;
       this.project.action = status; // 0保存， 1提交
       // 编辑
       if (!this.changename) {
@@ -515,7 +507,7 @@ export default {
         }
         let arr = [];
         for (let item of this.applyList) {
-          arr.push(`${item.departmentName}-${item.info}`)
+          arr.push(`${item.departmentName} - ${item.info}`)
         }
         this.project.applyUser = arr.join(',');
         if (this.project.id) {
