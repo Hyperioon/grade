@@ -191,6 +191,7 @@
         <el-upload class="upload-demo"
                    v-show="project.name"
                    ref="upload"
+                   :limit="limitnum"
                    :data="uploadData"
                    action="/api/fileUpload"
                    :on-remove="removeShenbao"
@@ -241,6 +242,19 @@
                    @click="onSubmit(1)">提交审核</el-button>
       </el-form-item>
     </el-form>
+    <el-dialog title="提示"
+               :visible.sync="dialogVisible"
+               width="30%">
+      <span>删除后需要重新上传申报书
+        <span v-show="project.projectClass === 2">和证明材料</span>
+      </span>
+      <span slot="footer"
+            class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary"
+                   @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -253,6 +267,8 @@ export default {
   },
   data() {
     return {
+      dialogVisible: false,
+      limitnum: 1,
       userList: [],
       applyUser: [],
       shenbaoFile: [],
@@ -395,6 +411,7 @@ export default {
       }
     },
 
+
     handleRemove(file, fileList) {
       this.uploadFiles = fileList;
     },
@@ -432,9 +449,8 @@ export default {
           // 文件
           if (this.project.material.length > 0) {
             let fileArr = this.project.material.split(',');
-            let obj = {};
             for (let i = 0; i < fileArr.length; i++) {
-              obj.name = fileArr[i];
+              let obj = {};
               let index = fileArr[i].indexOf('/');
               obj.name = fileArr[i].slice(index + 1);
               obj.url = fileArr[i];
@@ -445,9 +461,8 @@ export default {
           }
 
           let shenbaoArr = this.project.application.split(',');
-          let shenbaoObj = {}
           for (let i = 0; i < shenbaoArr.length; i++) {
-            shenbaoObj.name = shenbaoArr[i];
+            let shenbaoObj = {}
             let index = shenbaoArr[i].indexOf('/');
             shenbaoObj.name = shenbaoArr[i].slice(index + 1);
             shenbaoObj.url = shenbaoArr[i];
@@ -467,22 +482,24 @@ export default {
       // 编辑
       if (!this.changename) {
         if (this.$route.params.projectId) {
+          // 证明材料
           let list = [];
           for (let item of this.uploadFiles) {
             if (item.response) {
               list = list.concat(item.response.result);
             } else {
-              list = list.concat(item.name);
+              list = list.concat(item.url);;
             }
           }
           list = list.join(',');
           this.project.material = list;
+          // 申报书
           let shenbaoList = [];
           for (let item of this.shenbaoFile) {
             if (item.response) {
               shenbaoList = shenbaoList.concat(item.response.result);
             } else {
-              shenbaoList = shenbaoList.concat(item.name);
+              shenbaoList = shenbaoList.concat(item.url);
             }
           }
           shenbaoList = shenbaoList.join(',');

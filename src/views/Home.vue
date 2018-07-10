@@ -52,8 +52,8 @@
                             index="/approve"
                             @click="$router.push('/approve')">待审批项目</el-menu-item>
               <el-menu-item v-if="user.role === 1"
-                            index="/allProject"
-                            @click="$router.push('/allProject')">部门全部项目</el-menu-item>
+                            index="/bumenProject"
+                            @click="$router.push('/bumenProject')">部门全部项目</el-menu-item>
 
               <!-- 管理员 -->
               <el-menu-item v-if="user.role === 3"

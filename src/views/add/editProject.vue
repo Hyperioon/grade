@@ -190,6 +190,7 @@
       <el-form-item label='申报书上传'>
         <el-upload class="upload-demo"
                    v-show="project.name"
+                   :limit="limitnum"
                    ref="upload"
                    :data="uploadData"
                    action="/api/fileUpload"
@@ -238,7 +239,7 @@
       <el-form-item class="submit">
         <el-button @click="onSubmit(0)">保存草稿</el-button>
         <el-button type="primary"
-                   @click="onSubmit(1)">提交</el-button>
+                   @click="onSubmit(1)">提交审批</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -253,6 +254,7 @@ export default {
   },
   data() {
     return {
+      limitnum: 1,
       userList: [],
       applyUser: [],
       shenbaoFile: [],
@@ -380,6 +382,7 @@ export default {
     },
     fileUpload(file, fileList) {
       if (file.successSign) {
+        console.log(fileList)
         this.uploadFiles.push(fileList);
         this.changename = false;
       } else {
@@ -388,7 +391,9 @@ export default {
     },
     shenbaoUpload(file, fileList) {
       if (file.successSign) {
+        console.log(fileList)
         this.shenbaoFile.push(fileList);
+        console.log(this.shenbaoFile)
         this.changename = false;
       } else {
         this.uploadError(file.message);
@@ -415,7 +420,6 @@ export default {
           // 报奖联系人信息拼接
           this.contactDep = this.project.contact.substring(0, index);
           this.contactInfo = this.project.contact.substring(index + 1);
-          console.log(this.contactInfo);
           // 完成人拼接
           let arr = this.project.applyUser.split(',');
           let indexList = [];
@@ -432,8 +436,8 @@ export default {
           // 文件
           if (this.project.material.length > 0) {
             let fileArr = this.project.material.split(',');
-            let obj = {};
             for (let i = 0; i < fileArr.length; i++) {
+              let obj = {};
               obj.name = fileArr[i];
               let index = fileArr[i].indexOf('/');
               obj.name = fileArr[i].slice(index + 1);
@@ -445,8 +449,9 @@ export default {
           }
 
           let shenbaoArr = this.project.application.split(',');
-          let shenbaoObj = {}
           for (let i = 0; i < shenbaoArr.length; i++) {
+            let shenbaoObj = {}
+
             shenbaoObj.name = shenbaoArr[i];
             let index = shenbaoArr[i].indexOf('/');
             shenbaoObj.name = shenbaoArr[i].slice(index + 1);
@@ -462,7 +467,7 @@ export default {
       })
     },
     onSubmit(status) {
-      this.project.contact = `${this.contactDep} - ${this.contactInfo}`;
+      this.project.contact = `${this.contactDep}-${this.contactInfo}`;
       this.project.action = status; // 0保存， 1提交
       // 编辑
       if (!this.changename) {
@@ -472,7 +477,7 @@ export default {
             if (item.response) {
               list = list.concat(item.response.result);
             } else {
-              list = list.concat(item.name);
+              shenbaoList = shenbaoList.concat(item.url);;
             }
           }
           list = list.join(',');
@@ -482,7 +487,7 @@ export default {
             if (item.response) {
               shenbaoList = shenbaoList.concat(item.response.result);
             } else {
-              shenbaoList = shenbaoList.concat(item.name);
+              shenbaoList = shenbaoList.concat(item.url);
             }
           }
           shenbaoList = shenbaoList.join(',');
@@ -511,6 +516,7 @@ export default {
         }
         this.project.applyUser = arr.join(',');
         if (this.project.id) {
+          // console.log(this.project);  return
           updateProject(this.project).then(res => {
             if (res.successSign) {
               Message({

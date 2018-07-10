@@ -70,6 +70,7 @@
                     size="small"
                     min="0"
                     type="number"
+                    @keyup.native="scope.row.rating =  scope.row.rating.replace(/[^\d]/g, '')"
                     @blur="dafen(scope.row)"
                     v-model="scope.row.rating"></el-input>
         </template>
@@ -182,11 +183,7 @@ export default {
   methods: {
     dafen(value) {
       const val = value.rating;
-      console.log(value.name)
-      console.log(val)
-
       if (val) {
-
         if (val === '') {
           this.$message.error('请按照要求打分！');
         }

@@ -29,22 +29,29 @@
           </el-select>
         </el-form-item>
         <el-form-item label="状态">
-          <el-select v-model="formInline.region"
-                     placeholder="活动区域">
+          <el-select clearable
+                     v-model="project.status"
+                     placeholder="状态">
             <el-option label="草稿"
-                       value="shanghai"></el-option>
-            <el-option label="部门经历审核"
-                       value="beijing"></el-option>
-            <el-option label="企发专员审核"
-                       value="beijing"></el-option>
-            <el-option label="初评"
-                       value="beijing"></el-option>
-            <el-option label="终评"
-                       value="beijing"></el-option>
-            <el-option label="出局"
-                       value="beijing"></el-option>
-            <el-option label="获奖"
-                       value="beijing"></el-option>
+                       :value="0"></el-option>
+            <el-option label="部门审批"
+                       :value="1"></el-option>
+            <el-option label="形式审查"
+                       :value="2"></el-option>
+            <el-option label="待分配专家"
+                       :value="3"></el-option>
+            <el-option label="待初评"
+                       :value="4"></el-option>
+            <el-option label="已初评"
+                       :value="5"></el-option>
+            <el-option label="待终评"
+                       :value="6"></el-option>
+            <el-option label="已终评"
+                       :value="7"></el-option>
+            <el-option label="评奖"
+                       :value="8"></el-option>
+            <el-option label="驳回"
+                       :value="9"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>

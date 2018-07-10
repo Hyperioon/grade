@@ -103,7 +103,6 @@
                          label="状态"
                          width="100">
         </el-table-column>
-
         <el-table-column fixed="right"
                          label="操作"
                          align="center"

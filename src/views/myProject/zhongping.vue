@@ -96,8 +96,9 @@
           <template slot-scope="scope">
             <el-input placeholder="输入1-100的整数"
                       @blur="dafen(scope.row)"
+                      type="email"
                       v-show="scope.row.finalStatus !== 2"
-                      type="number"
+                      @keyup.native="scope.row.leaderScore =  scope.row.leaderScore.replace(/[^\d]/g, '')"
                       v-model="scope.row.leaderScore"
                       size="small"></el-input>
             <span v-show="scope.row.finalStatus === 2">{{scope.row.leaderScore}}</span>

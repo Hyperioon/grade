@@ -189,22 +189,34 @@ export default {
           return '草稿';
           break;
         case 1:
-          return '部门经理审核';
+          return '部门审批';
           break;
         case 2:
-          return '企发专员审核';
+          return '形式审查';
           break;
         case 3:
-          return '初评';
+          return '待分配专家';
           break;
         case 4:
-          return '终评';
+          return '待初评';
           break;
         case 5:
-          return '出局';
+          return '已初评';
+          break;
+        case 6:
+          return '待终评';
+          break;
+        case 7:
+          return '已终评';
+          break;
+        case 8:
+          return '评奖';
+          break;
+        case 9:
+          return '驳回';
           break;
         default:
-          return '获奖'
+          return ''
       }
     },
     getMyProjectList() {

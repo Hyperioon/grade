@@ -28,6 +28,7 @@ const editExpert = r => require.ensure([], () => r(require('./views/manage/editE
 const myInfo = r => require.ensure([], () => r(require('./views/manage/myInfo.vue')));
 const addUser = r => require.ensure([], () => r(require('./views/manage/addUser.vue')));
 const allProject = r => require.ensure([], () => r(require('./views/myProject/allProject.vue')));
+const bumenProject = r => require.ensure([], () => r(require('./views/myProject/bumenProject.vue')));
 const manageApprove = r => require.ensure([], () => r(require('./views/myProject/manageApprove.vue')));
 const projectDetail = r => require.ensure([], () => r(require('./views/myProject/projectDetail.vue')));
 
@@ -76,6 +77,7 @@ let routes = [
             { path: '/approve', component: approve, name: '待审批项目', hidden: true },
             { path: '/manageApprove', component: manageApprove, name: '待审批项目', hidden: true },
             { path: '/allProject', component: allProject, name: '全部项目', hidden: true },
+            { path: '/bumenProject', component: bumenProject, name: '部门全部项目', hidden: true },
             { path: '/chuping', component: chuping, name: '初评项目', hidden: true },
             { path: '/expertDafen', component: expertDafen, name: '初评打分情况', hidden: true },
             { path: '/zhongpingDafen', component: zhongpingDafen, name: '终评打分情况', hidden: true },

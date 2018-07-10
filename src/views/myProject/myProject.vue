@@ -86,7 +86,7 @@
             </el-button>
             <el-button @click.native.prevent="edit(scope.row)"
                        type="text"
-                       v-show="scope.row.status === 0 || scope.row.status === 8"
+                       v-show="scope.row.status === 0 || scope.row.status === 9"
                        size="small">
               编辑
             </el-button>
@@ -142,7 +142,7 @@ export default {
     },
     downResourse() {
       if (this.myProjectList.length > 0) {
-        window.open(`/api/project/downZip?applyDepartment=${this.project.applyDepartment}&projectClass=${this.project.projectClass}&status=${this.project.status}&myProject=1`);
+        window.open(`/api/project/downZip?applyDepartment=${this.project.applyDepartment}&projectClass=${this.project.projectClass}&status=${this.project.status}&myProject=0`);
       } else {
         this.$message.error('暂无文件');
       }
