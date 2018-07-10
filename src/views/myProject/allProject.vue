@@ -127,6 +127,11 @@
                        size="small">
               详情
             </el-button>
+            <el-button @click.native.prevent="edit(scope.row)"
+                       type="text"
+                       size="small">
+              编辑
+            </el-button>
             <el-button @click.native.prevent="download(scope.row)"
                        type="text"
                        size="small">
@@ -264,7 +269,7 @@ export default {
       this.$router.push({ path: '/projectDetail', query: { id: row.id } });
     },
     edit(row) {
-      this.$router.push({ name: '创建项目', params: { projectId: row.id, projectClass: row.projectClass } });
+      this.$router.push({ name: '编辑项目', params: { projectId: row.id, projectClass: row.projectClass } });
     },
     reject(row) {
       this.approveParam.view = '';

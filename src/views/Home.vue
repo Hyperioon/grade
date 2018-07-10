@@ -91,9 +91,9 @@
               <el-menu-item v-if="user.role === 2"
                             index="/zhongping"
                             @click="$router.push('/zhongping')">待终评</el-menu-item>
-              <el-menu-item v-if="user.role === 2"
+              <!-- <el-menu-item v-if="user.role === 2"
                             index="/allProject"
-                            @click="$router.push('/allProject')">公司全部项目</el-menu-item>
+                            @click="$router.push('/allProject')">公司全部项目</el-menu-item> -->
             </el-submenu>
 
             <el-menu-item v-if="item.leaf&&item.children.length>0"
