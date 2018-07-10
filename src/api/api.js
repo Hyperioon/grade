@@ -146,3 +146,7 @@ export const getAdminProjectList = param => {
 export const getExpertProjectList = param => {
   return req.get(`${base}/api/leader/getExpertProjectList`, param).then(res => res.data);
 }
+// 项目申报通道是否关闭
+export const closeProjectApply = param => {
+  return req.post(`${base}/api/project/closeProjectApply`, param).then(res => res.data);
+}

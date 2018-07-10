@@ -53,14 +53,20 @@
         <span>{{project.introduction}}</span>
       </el-form-item>
       <el-form-item label='申报书'>
-        <a :href="'/api/download?fileName='+project.application">{{application}}</a>
+        <div v-for="item in application">
+          <a :href="'/api/download?fileName='+item">{{item | formatApplication}}</a>
+        </div>
+        <!-- <a :href="'/api/download?fileName='+project.application">{{application}}</a> -->
       </el-form-item>
       <el-form-item label='证明材料'
                     v-show="project.projectClass === 2">
-        <a :href="'/api/download?fileName='+project.material">{{material}}</a>
+        <div v-for="item in material">
+          <a :href="'/api/download?fileName='+item">{{item | formatMaterial}}</a>
+        </div>
       </el-form-item>
     </el-form>
-    <el-button class="back" @click="$router.go(-1)">返回</el-button>
+    <el-button class="back"
+               @click="$router.go(-1)">返回</el-button>
 
   </div>
 </template>
@@ -69,8 +75,18 @@
 import { Message } from 'element-ui';
 import { createProject, updateProject, getAllLdapUsers, getProjectInfo } from '@/api/api';
 export default {
-  name: 'createProject',
+  name: 'projectDetail',
   components: {
+  },
+  filters: {
+    formatApplication(value) {
+      let index = value.indexOf('/');
+      return value.slice(index + 1);
+    },
+    formatMaterial(value) {
+      let index = value.indexOf('/');
+      return value.slice(index + 1);
+    }
   },
   data() {
     return {
@@ -102,10 +118,11 @@ export default {
           this.applyList = this.project.applyUser.split(',');
           console.log(this.applyList);
           this.contact = this.project.contact.split(',');
-          let index = this.project.application.indexOf('/');
-          this.application = this.project.application.slice(index+1);
-          let item = this.project.material.indexOf('/');
-          this.material = this.project.material.slice(item+1);
+          this.application = this.project.application.split(',');
+          // let index = this.project.application.indexOf('/');
+          // this.application = this.project.application.slice(index+1);
+          // let item = this.project.material.indexOf('/');
+          this.material = this.project.material.split(',');
         } else {
           Message({
             message: res.message,

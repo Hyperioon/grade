@@ -30,15 +30,17 @@
       <div>
         <div class="add">
           <el-button class="add-button"
-                     @click="$router.push({name: '创建项目', params: {projectClass: 2}})">创新项目奖</el-button>
-          <span class="download" @click="download('申报书模板-创新项目奖.docx')">创新项目奖申报模板下载
+                     @click="isClosed(2)">创新项目奖</el-button>
+          <span class="download"
+                @click="download('申报书模板-创新项目奖.docx')">创新项目奖申报模板下载
 
           </span>
         </div>
         <div class="add">
           <el-button class="add-button"
-                     @click="$router.push({name: '创建项目', params: {projectClass: 1}})">在岗技术革新奖</el-button>
-          <span class="download" @click="download('申报书模板-在岗技术革新奖.pptx')">在岗技术革新奖申报模板下载</span>
+                     @click="isClosed(1)">在岗技术革新奖</el-button>
+          <span class="download"
+                @click="download('申报书模板-在岗技术革新奖.pptx')">在岗技术革新奖申报模板下载</span>
 
         </div>
 
@@ -49,7 +51,7 @@
 </template>
 
 <script>
-import { zipfileDownload } from '@/api/api';
+import { zipfileDownload, closeProjectApply } from '@/api/api';
 export default {
   name: 'firstTrial',
   components: {
@@ -63,8 +65,17 @@ export default {
     download(name) {
       let data = encodeURI(name);
       window.open(`/api/download?fileName=${data}`);
-    }
+    },
+    isClosed(value) {
+      closeProjectApply().then(res => {
+        if (res.result === 0) {
+          this.$router.push({ name: '创建项目', params: { projectClass: value } })
+        } else if (res.result === 1) {
+          this.$message.error('申报通道已关闭～');
+        }
+      })
   }
+}
 };
 </script>
 

@@ -59,16 +59,17 @@ export default {
     getUserInfo() {
       queryUserInfo({ id: this.userId }).then(res => {
         this.userInfo = res.result;
-        console.log(this.userInfo.expert.juniorExpert)
-        if (this.userInfo.expert.juniorExpert === 1) {
-          this.juniorExpert = '是';
-        } else {
-          this.juniorExpert = '否';
-        }
-        if (this.userInfo.expert.finalExpert === 1) {
-          this.finalExpert = '是';
-        } else {
-          this.finalExpert = '否';
+        if (this.userInfo.expert !== null) {
+          if (this.userInfo.expert.juniorExpert === 1) {
+            this.juniorExpert = '是';
+          } else {
+            this.juniorExpert = '否';
+          }
+          if (this.userInfo.expert.finalExpert === 1) {
+            this.finalExpert = '是';
+          } else {
+            this.finalExpert = '否';
+          }
         }
         if (this.userInfo.forbidden === 1) {
           this.forbidden = '是';

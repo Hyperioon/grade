@@ -149,7 +149,7 @@
       <el-form-item label="任务来源"
                     v-show="project.projectClass === 2">
         <el-input class="desc lang"
-                  :maxlength="300"
+                  :maxlength="500"
                   type="textarea"
                   placeholder="按“年份，项目类别，研发计划内项目名称”格式填写。多个项目联合报奖的，请列出全部项目，项目名称要求来源项目管理系统"
                   v-model="project.relevance"></el-input>
@@ -164,7 +164,7 @@
       <el-form-item label="成果简介">
         <el-input class="desc lang"
                   type="textarea"
-                  :maxlength="300"
+                  :maxlength="500"
                   placeholder="简要描述该革新成果拟解决的实际工作问题、交付物及创新点、应用效果等，不超过300字"
                   v-model="project.introduction"></el-input>
       </el-form-item>

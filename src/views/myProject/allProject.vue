@@ -101,12 +101,6 @@
                          width="140"
                          label="状态">
         </el-table-column>
-        <el-table-column prop="finalScore"
-                         :formatter="formatFinal"
-                         align="center"
-                         width="180"
-                         label="结果">
-        </el-table-column>
         <el-table-column prop="expertFinalScore"
                          align="center"
                          width="180"
@@ -117,7 +111,12 @@
                          width="180"
                          label="终评得分">
         </el-table-column>
-
+        <el-table-column prop="finalScore"
+                         :formatter="formatFinal"
+                         align="center"
+                         width="180"
+                         label="结果">
+        </el-table-column>
         <el-table-column fixed="right"
                          label="操作"
                          align="center"
@@ -190,13 +189,13 @@ export default {
       this.getAllProjectList();
     },
     formatFinal(data) {
-      if (data.finalScope === 1) {
+      if (data.finalScore === 1) {
         return '一等奖';
-      } else if (data.finalScope === 2) {
+      } else if (data.finalScore === 2) {
         return '二等奖';
-      } else if (data.finalScope === 3) {
+      } else if (data.finalScore === 3) {
         return '三等奖';
-      } else if (data.finalScope === 0) {
+      } else if (data.finalScore === 0) {
         return '淘汰';
       } else {
         return '';

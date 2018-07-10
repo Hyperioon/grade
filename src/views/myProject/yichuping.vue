@@ -124,7 +124,7 @@
              class="dialog-footer">
           <!-- <el-button @click="getExpert">重新随机分配</el-button> -->
           <el-button type="primary"
-                     @click="sure">确 定</el-button>
+                     @click="sureGrade">确 定</el-button>
         </div>
       </el-dialog>
       <div class="pagination">
@@ -199,6 +199,19 @@ export default {
       this.getExpert();
       this.fenpeiShow = true;
     },
+    sureGrade() {
+      let param = {
+        id: this.projectId,
+        finalScore: this.finalScore
+      }
+      updateFinalScore(param).then(res => {
+        if (res.successSign) {
+          this.pingjiangShow = false;
+          this.$message.success('操作成功');
+
+        }
+      })
+    },
     getExpert() {
       this.loading = true;
       getAllFinalReviewExpert({ projectId: this.projectId }).then(res => {
@@ -210,7 +223,7 @@ export default {
     },
     sure() {
       let arr = [];
-      for(let item of this.expertList) {
+      for (let item of this.expertList) {
         arr.push(item.id);
       }
       arr = arr.join(',');
@@ -218,7 +231,6 @@ export default {
         projectId: this.projectId,
         userIds: arr
       }
-      console.log(param)
       chooseFinalExpert(param).then(res => {
         if (res.resultCode === '200') {
           this.$message.success("成功");

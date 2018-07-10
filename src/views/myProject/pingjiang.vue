@@ -59,11 +59,21 @@
                          label="领域">
         </el-table-column>
 
-        <el-table-column prop="status"
+        <el-table-column prop="expertFinalScore"
                          align="center"
-                         :formatter="formatStatus"
                          width="140"
-                         label="状态">
+                         label="评初得分">
+        </el-table-column>
+        <el-table-column prop="leaderFinalScore"
+                         align="center"
+                         width="140"
+                         label="终评得分">
+        </el-table-column>
+        <el-table-column prop="finalScore"
+                         align="center"
+                         :formatter="formatFinal"
+                         width="140"
+                         label="结果">
         </el-table-column>
 
         <el-table-column fixed="right"
@@ -94,9 +104,32 @@
                        size="small">
               下载
             </el-button>
+            <el-button @click.native.prevent="pingjiang(scope.row)"
+                       type="text"
+                       size="small">
+              评奖
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
+      <!-- 评奖 -->
+      <el-dialog title="评奖"
+                 :visible.sync="pingjiangShow">
+        <el-radio v-model="finalScore"
+                  label="1">一等奖</el-radio>
+        <el-radio v-model="finalScore"
+                  label="2">二等奖</el-radio>
+        <el-radio v-model="finalScore"
+                  label="3">三等奖</el-radio>
+        <el-radio v-model="finalScore"
+                  label="0">淘汰</el-radio>
+        <div slot="footer"
+             class="dialog-footer">
+          <!-- <el-button @click="getExpert">重新随机分配</el-button> -->
+          <el-button type="primary"
+                     @click="sureGrade">确 定</el-button>
+        </div>
+      </el-dialog>
       <!-- 驳回弹窗 -->
       <el-dialog title="驳回意见"
                  :visible.sync="rejectShow"
@@ -121,7 +154,7 @@
 </template>
 
 <script>
-import { getProjectList, getDepartment, approve, getUserInfo } from '@/api/api';
+import { getProjectList, getDepartment, approve,updateFinalScore, getUserInfo } from '@/api/api';
 export default {
   name: 'approve',
   components: {
@@ -132,8 +165,11 @@ export default {
       rejectReason: '',
       listLoading: false,
       rejectShow: false,
+      pingjiangShow: false,
       allDepartment: [],
+      finalScore: '',
       total: 0,
+      projectId: '',
       approveParam: {
         projectId: '',
         mark: 0,
@@ -150,11 +186,11 @@ export default {
   },
   methods: {
     onExport() {
-      window.open(`/api/project/exportMyProjectExcel/?applyDepartment=${this.project.applyDepartment}&projectClass=${this.project.projectClass}&status=${this.project.status}`);
+      window.open(`/api/project/exportMyProjectExcel/?projectClass=${this.project.projectClass}&status=${this.project.status}`);
     },
     downResourse() {
       if (this.projectList.length > 0) {
-        window.open(`/api/project/downZip?applyDepartment=${this.project.applyDepartment}&projectClass=${this.project.projectClass}&status=${this.project.status}&myProject=1`);
+        window.open(`/api/project/downZip?projectClass=${this.project.projectClass}&status=${this.project.status}&myProject=1`);
       } else {
         this.$message.error('暂无文件');
       }
@@ -170,37 +206,17 @@ export default {
         return '创新项目奖';
       }
     },
-    formatStatus(data) {
-      switch (data.status) {
-        case 0:
-          return '草稿';
-          break;
-        case 1:
-          return '部门审批';
-          break;
-        case 2:
-          return '形式审查';
-          break;
-        case 3:
-          return '待分配专家';
-          break;
-        case 4:
-          return '初评';
-          break;
-        case 5:
-          return '已初评';
-          break;
-        case 6:
-          return '终评';
-          break;
-        case 7:
-          return '结果';
-          break;
-        case 8:
-          return '驳回';
-          break;
-        default:
-          return '获奖'
+    formatFinal(data) {
+      if (data.finalScore === 1) {
+        return '一等奖';
+      } else if (data.finalScore === 2) {
+        return '二等奖';
+      } else if (data.finalScore === 3) {
+        return '三等奖';
+      } else if (data.finalScore === 0) {
+        return '淘汰';
+      } else {
+        return '';
       }
     },
     getAllDepartment() {
@@ -219,6 +235,38 @@ export default {
           this.total = res.pageVo.totalCount;
         } else {
           this.projectList = [];
+        }
+      })
+    },
+    sure() {
+      let arr = [];
+      for (let item of this.expertList) {
+        arr.push(item.id);
+      }
+      arr = arr.join(',');
+      let param = {
+        projectId: this.projectId,
+        userIds: arr
+      }
+      console.log(param)
+      chooseFinalExpert(param).then(res => {
+        if (res.resultCode === '200') {
+          this.$message.success("成功");
+          this.getAllProjectList();
+          this.fenpeiShow = false;
+        }
+      })
+    },
+    sureGrade() {
+      let param = {
+        id: this.projectId,
+        finalScore: this.finalScore
+      }
+      updateFinalScore(param).then(res => {
+        if (res.successSign) {
+          this.pingjiangShow = false;
+          this.$message.success('操作成功');
+          this.getAllProjectList();
         }
       })
     },
@@ -242,7 +290,7 @@ export default {
       window.open(`/api/project/zipfileDownload?fileNames=${data1},${data2}`);
     },
     detail(row) {
-      this.$router.push({path: '/projectDetail', query: {id: row.id}});
+      this.$router.push({ path: '/projectDetail', query: { id: row.id } });
     },
     ensuerReject() {
       approve(this.approveParam).then(res => {
@@ -255,6 +303,10 @@ export default {
           this.rejectShow = false;
         }
       })
+    },
+    pingjiang(row) {
+      this.projectId = row.id;
+      this.pingjiangShow = true;
     },
     agree(row) {
       let param = {

@@ -186,9 +186,7 @@ export default {
       console.log(val)
 
       if (val) {
-        if (val.indexOf(".") != -1 && val.substring(val.indexOf(".") + 1, val.length).length > 2) {
-          this.$message.error('小数点后最多两位！');
-        }
+
         if (val === '') {
           this.$message.error('请按照要求打分！');
         }
@@ -199,6 +197,9 @@ export default {
         let name = parseInt(value.name)
         if (rating > name) {
           this.$message.error('分数大于满分！');
+        }
+        if (rating % 1 !== 0) {
+          this.$message.error('请输入整数！');
         }
       }
     },

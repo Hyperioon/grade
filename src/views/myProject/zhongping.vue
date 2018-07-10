@@ -4,7 +4,6 @@
       <el-form :inline="true"
                :model="project"
                class="demo-form-inline">
-
         <el-form-item label="类型">
           <el-select clearable
                      v-model="project.projectClass"
@@ -97,9 +96,11 @@
           <template slot-scope="scope">
             <el-input placeholder="输入1-100的整数"
                       @blur="dafen(scope.row)"
+                      v-show="scope.row.finalStatus !== 2"
                       type="number"
                       v-model="scope.row.leaderScore"
                       size="small"></el-input>
+            <span v-show="scope.row.finalStatus === 2">{{scope.row.leaderScore}}</span>
           </template>
         </el-table-column>
       </el-table>
@@ -116,9 +117,11 @@
                      @click="ensuerReject">确 定</el-button>
         </span>
       </el-dialog>
-      <div class="button-wrap">
+      <div class="button-wrap"
+           v-show="oprerate">
         <el-button @click="submit(1)">保存</el-button>
-        <el-button type="primary" @click="submit(2)">提交</el-button>
+        <el-button type="primary"
+                   @click="submit(2)">提交</el-button>
       </div>
       <div class="pagination">
         <el-pagination @current-change="handleCurrentChange"
@@ -142,6 +145,7 @@ export default {
       rejectReason: '',
       listLoading: false,
       rejectShow: false,
+      oprerate: false,
       allDepartment: [],
       total: 0,
       approveParam: {
@@ -187,11 +191,13 @@ export default {
       })
     },
     detail(row) {
-      this.$router.push({ path: '/projectDetail', query: { id: row.id } });
+      this.$router.push({ path: '/projectDetail', query: { id: row.projectId } });
     },
     dafen(row) {
+      if (row.leaderScore % 1 !== 0) {
+        this.$message.error('请输入整数！');
+      }
       let leaderScore = parseInt(row.leaderScore);
-      console.log(leaderScore)
       if (leaderScore > 100 || leaderScore < 0) {
         this.$message.error('分数不符合要求！');
       }
@@ -204,9 +210,11 @@ export default {
         if (!item.leaderScore) {
           item.leaderScore = 'noScore'
         }
-        arr.push(item.leaderScore);
-        ids.push(item.id);
-        projectIds.push(item.projectId);
+        if (item.finalStatus !== 2) {
+          arr.push(item.leaderScore);
+          ids.push(item.id);
+          projectIds.push(item.projectId);
+        }
       }
       let param = {
         ids: ids.join(','),
@@ -228,6 +236,10 @@ export default {
           for (let item of this.projectList) {
             item.role = this.userRole;
             item.applyUser = item.applyUser.split(',');
+            console.log(item.finalStatus)
+            if (item.finalStatus !== 2) {
+              this.oprerate = true;
+            }
           }
           this.total = res.pageVo.totalCount;
         } else {

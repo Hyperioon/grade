@@ -70,7 +70,7 @@
                          label="领域">
         </el-table-column>
 
-        <el-table-column prop="expertFinalScore"
+        <el-table-column prop="leaderScore"
                          align="center"
                          label="得分"
                          width="100">
@@ -153,7 +153,7 @@
                          width="140"
                          label="领域">
         </el-table-column>
-        <el-table-column prop="expertFinalScore"
+        <el-table-column prop="leaderScore"
                          align="center"
                          label="得分"
                          width="100">
@@ -303,22 +303,25 @@ export default {
           return '待分配专家';
           break;
         case 4:
-          return '初评';
+          return '待初评';
           break;
         case 5:
           return '已初评';
           break;
         case 6:
-          return '终评';
+          return '待终评';
           break;
         case 7:
-          return '结果';
+          return '已终评';
           break;
         case 8:
+          return '评奖';
+          break;
+        case 9:
           return '驳回';
           break;
         default:
-          return '获奖'
+          return ''
       }
     },
     getAllDepartment() {
