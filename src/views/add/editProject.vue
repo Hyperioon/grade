@@ -234,6 +234,8 @@
         </el-tooltip>
         <p>上传获奖证书、专利证书等扫描件，没有可不传</p>
 
+        <p>如需重新上传申报书和证明材料， 请删除所有材料后再上传</p>
+
       </el-form-item>
 
       <el-form-item class="submit">
@@ -471,83 +473,46 @@ export default {
       this.project.action = status; // 0保存， 1提交
       // 编辑
       if (!this.changename) {
-        if (this.$route.params.projectId) {
-          let list = [];
-          for (let item of this.uploadFiles) {
-            if (item.response) {
-              list = list.concat(item.response.result);
-            } else {
-              shenbaoList = shenbaoList.concat(item.url);;
-            }
-          }
-          list = list.join(',');
-          this.project.material = list;
-          let shenbaoList = [];
-          for (let item of this.shenbaoFile) {
-            if (item.response) {
-              shenbaoList = shenbaoList.concat(item.response.result);
-            } else {
-              shenbaoList = shenbaoList.concat(item.url);
-            }
-          }
-          shenbaoList = shenbaoList.join(',');
-          this.project.application = shenbaoList;
-        } else { // 创建
-          if (this.uploadFiles.length > 0) {
-            let list = [];
-            for (let item of this.uploadFiles) {
-              list = list.concat(item.response.result);
-            }
-            list = list.join(',');
-            this.project.material = list;
-          }
-          if (this.shenbaoFile.length > 0) {
-            let shenbaoList = [];
-            for (let item of this.shenbaoFile) {
-              shenbaoList = shenbaoList.concat(item.response.result);
-            }
-            shenbaoList = shenbaoList.join(',');
-            this.project.application = shenbaoList;
+        let list = [];
+        for (let item of this.uploadFiles) {
+          if (item.response) {
+            list = list.concat(item.response.result);
+          } else {
+            list = list.concat(item.url);;
           }
         }
+        list = list.join(',');
+        this.project.material = list;
+
+        let shenbaoList = [];
+        for (let item of this.shenbaoFile) {
+          if (item.response) {
+            shenbaoList = shenbaoList.concat(item.response.result);
+          } else {
+            shenbaoList = shenbaoList.concat(item.url);
+          }
+        }
+        shenbaoList = shenbaoList.join(',');
+        this.project.application = shenbaoList;
         let arr = [];
         for (let item of this.applyList) {
           arr.push(`${item.departmentName} - ${item.info}`)
         }
         this.project.applyUser = arr.join(',');
-        if (this.project.id) {
-          // console.log(this.project);  return
-          updateProject(this.project).then(res => {
-            if (res.successSign) {
-              Message({
-                message: '操作成功',
-                type: 'success'
-              });
-              this.$router.push({ path: '/allProject' });
-            } else {
-              Message({
-                message: res.message,
-                type: 'error'
-              });
-            }
-          })
-        } else {
-          createProject(this.project).then(res => {
-            if (res.successSign) {
-              Message({
-                message: '操作成功',
-                type: 'success'
-              });
-              this.$router.push({ path: '/myProject' });
-            } else {
-              Message({
-                message: res.message,
-                type: 'error'
-              });
-
-            }
-          })
-        }
+        updateProject(this.project).then(res => {
+          if (res.successSign) {
+            Message({
+              message: '操作成功',
+              type: 'success'
+            });
+            this.$router.push({ path: '/allProject' });
+          } else {
+            Message({
+              message: res.message,
+              type: 'error'
+            });
+          }
+        })
       } else {
         if (this.project.projectClass === 2) {
           this.$message.error('请重新上传申报书，证明材料！');

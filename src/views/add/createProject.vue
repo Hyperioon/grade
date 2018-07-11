@@ -234,6 +234,10 @@
         </el-tooltip>
         <p>上传获奖证书、专利证书等扫描件，没有可不传</p>
 
+
+        <p>如需重新上传申报书和证明材料， 请删除所有材料后再上传</p>
+
+
       </el-form-item>
 
       <el-form-item class="submit">
