@@ -91,19 +91,19 @@ let routes = [
     {
         path: '/',
         component: Home,
-        name: '用户管理',
+        name: '系统管理',
         hidden: true,
         manage: true,
         iconCls: 'fa fa-id-card-o',
         children: [
-            { path: '/tongbu', component: tongbu, name: '系统管理' },
-            { path: '/userManage', component: userManage, name: '修改用户信息' },
-            { path: '/addUser', component: addUser, name: '添加外部人员' },
-            { path: '/expertManage', component: expertManage, name: '专家库' },
+            { path: '/userManage', component: userManage, name: '用户管理' },
+            { path: '/addUser', component: addUser, name: '添加用户' },
+            { path: '/expertManage', component: expertManage, name: '专家库管理' },
             { path: '/editUser', component: editUser, name: '修改用户信息', hidden: true },
             { path: '/addExpert', component: addExpert, name: '添加到专家库', hidden: true },
             { path: '/editExpert', component: editExpert, name: '修改用户信息', hidden: true },
-            { path: '/myInfo', component: myInfo, name: '个人信息', hidden: true }
+            { path: '/myInfo', component: myInfo, name: '个人信息', hidden: true },
+            { path: '/tongbu', component: tongbu, name: '其他功能' }
         ]
     },
     {
