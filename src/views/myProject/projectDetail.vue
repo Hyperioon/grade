@@ -54,14 +54,14 @@
       </el-form-item>
       <el-form-item label='申报书'>
         <div v-for="item in application">
-          <a :href="'/api/download?fileName='+item">{{item | formatApplication}}</a>
+          <a :href="'/api/download2?fileName='+encodeURIComponent(encodeURIComponent(item))+'&'+'projectId='+ project.id">{{item | formatApplication}}</a>
         </div>
         <!-- <a :href="'/api/download?fileName='+project.application">{{application}}</a> -->
       </el-form-item>
       <el-form-item label='证明材料'
                     v-show="project.projectClass === 2">
         <div v-for="item in material">
-          <a :href="'/api/download?fileName='+item">{{item | formatMaterial}}</a>
+          <a :href="'/api/download2?fileName='+encodeURIComponent(encodeURIComponent(item))+'&'+'projectId='+ project.id">{{item | formatMaterial}}</a>
         </div>
       </el-form-item>
     </el-form>

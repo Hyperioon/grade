@@ -69,9 +69,6 @@
               <el-menu-item v-if="user.role === 3"
                             index="/expertDafen"
                             @click="$router.push('/expertDafen')">初评打分情况</el-menu-item>
-              <!-- <el-menu-item v-if="user.role === 3"
-                            index="./alloted"
-                            @click="$router.push('/alloted')">已分配专家项目</el-menu-item> -->
               <el-menu-item v-if="user.role === 3"
                             index="/yichuping"
                             @click="$router.push('/yichuping')">已初评项目</el-menu-item>

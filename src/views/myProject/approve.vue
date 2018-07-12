@@ -18,8 +18,8 @@
           <el-button @click="getAllProjectList">查询</el-button>
           <el-button type="primary"
                      @click="onExport">导出表格</el-button>
-          <el-button type="primary"
-                     @click="downResourse">下载所有材料</el-button>
+          <!-- <el-button type="primary"
+                     @click="downResourse">下载所有材料</el-button> -->
         </el-form-item>
       </el-form>
       <el-table :data="projectList"
@@ -109,7 +109,7 @@
       <el-dialog title="提示"
                  :visible.sync="agreeShow"
                  width="30%">
-        <span>该部门可申报不超过{{itemNumber}}个项目，请确认是否允许该项目申报</span>
+        <span>该部门还可申报{{itemNumber}}个创新项目奖，请确认是否允许该项目申报</span>
         <span slot="footer"
               class="dialog-footer">
           <el-button @click="agreeShow = false">取 消</el-button>
@@ -129,7 +129,7 @@
 
 <script>
 import { Message } from 'element-ui';
-import { getProjectList, getDepartment, approve, getUserInfo } from '@/api/api';
+import { getProjectList, getDepartment, approve, getUserInfo, innovateApproveNumber } from '@/api/api';
 export default {
   name: 'approve',
   components: {
@@ -137,7 +137,7 @@ export default {
   data() {
     return {
       userRole: 0,
-      itemNumber: 4,
+      itemNumber: 3,
       rejectReason: '',
       listLoading: false,
       agreeShow: false,
@@ -161,7 +161,11 @@ export default {
   },
   methods: {
     onExport() {
-      window.open(`/api/project/exportMyProjectExcel/?applyDepartment=${this.project.applyDepartment}&projectClass=${this.project.projectClass}&status=${this.project.status}`);
+      if (this.projectList.length > 0) {
+        window.open(`/api/project/exportMyProjectExcel?applyDepartment=${this.project.applyDepartment}&projectClass=${this.project.projectClass}&status=${this.project.status}`);
+      } else {
+        this.$message.error('暂无文件');
+      }
     },
     downResourse() {
       window.open(`/api/project/downZip?applyDepartment=${this.project.applyDepartment}&projectClass=${this.project.projectClass}&status=${this.project.status}&myProject=1`);
@@ -178,7 +182,7 @@ export default {
       }
     },
     detail(row) {
-      this.$router.push({path: '/projectDetail', query: {id: row.id}});
+      this.$router.push({ path: '/projectDetail', query: { id: row.id } });
     },
     formatStatus(data) {
       switch (data.status) {
@@ -255,8 +259,8 @@ export default {
       this.rejectShow = true;
     },
     download(row) {
-      let data1 = encodeURI(row.application);
-      let data2 = encodeURI(row.material);
+      let data1 = encodeURIComponent(row.application);
+      let data2 = encodeURIComponent(row.material);
       window.open(`/api/project/zipfileDownload?fileNames=${data1},${data2}`);
     },
 
@@ -273,12 +277,18 @@ export default {
       })
     },
     agree(row) {
-      let departmentList = ['质量测试部', '运营支撑部', '北京业务支持中心', '成都业务支持中心'];
-      if (departmentList.indexOf(row.applyDepartment) > -1) {
-        this.itemNumber = 3;
-      }
-      this.agreeShow = true;
+      innovateApproveNumber().then(res => {
+        console.log(res)
+        if (res.successSign) {
+          this.itemNumber = res.result;
+        }
+      });
       this.projectId = row.id;
+      if (row.projectClass === 2) {
+        this.agreeShow = true;
+      } else {
+        this.ensureAgree();
+      }
     },
     ensureAgree() {
       let param = {

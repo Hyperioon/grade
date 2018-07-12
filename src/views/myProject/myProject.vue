@@ -18,8 +18,8 @@
           <el-button @click="getProjectList">查询</el-button>
           <el-button type="primary"
                      @click="onExport">导出表格</el-button>
-          <el-button type="primary"
-                     @click="downResourse">下载所有材料</el-button>
+          <!-- <el-button type="primary"
+                     @click="downResourse">下载所有材料</el-button> -->
         </el-form-item>
       </el-form>
       <el-table :data="myProjectList"
@@ -138,7 +138,11 @@ export default {
   },
   methods: {
     onExport() {
-      window.open(`/api/project/exportMyProjectExcel?applyDepartment=${this.project.applyDepartment}&projectClass=${this.project.projectClass}&status=${this.project.status}&myProject=0`);
+      if (this.myProjectList.length > 0) {
+        window.open(`/api/project/exportMyProjectExcel?applyDepartment=${this.project.applyDepartment}&projectClass=${this.project.projectClass}&status=${this.project.status}&myProject=0`);
+      } else {
+        this.$message.error('暂无文件');
+      }
     },
     downResourse() {
       if (this.myProjectList.length > 0) {
@@ -226,11 +230,11 @@ export default {
       this.$router.push({ name: '创建项目', params: { projectId: row.id, projectClass: row.projectClass } });
     },
     detail(row) {
-      this.$router.push({path: '/projectDetail', query: {id: row.id}});
+      this.$router.push({ path: '/projectDetail', query: { id: row.id } });
     },
     download(row) {
-      let data1 = encodeURI(row.application);
-      let data2 = encodeURI(row.material);
+      let data1 = encodeURIComponent(row.application);
+      let data2 = encodeURIComponent(row.material);
       window.open(`/api/project/zipfileDownload?fileNames=${data1},${data2}`);
     },
   },

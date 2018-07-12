@@ -18,8 +18,8 @@
         <el-form-item>
           <el-button type="primary"
                      @click="onExport">导出表格</el-button>
-          <el-button type="primary"
-                     @click="downResourse">下载所有材料</el-button>
+          <!-- <el-button type="primary"
+                     @click="downResourse">下载所有材料</el-button> -->
         </el-form-item>
       </el-form>
       <el-table :data="projectList"
@@ -242,11 +242,15 @@ export default {
   },
   methods: {
     onExport() {
-      window.open(`/api/project/getAdminProjectListByCondition?projectClass=${this.project.projectClass}&action=1&pageNo=1`);
+      if (this.projectList.length > 0) {
+        window.open(`/api/leader/getAdminProjectListByCondition?projectClass=${this.project.projectClass}&action=1&pageNo=1`);
+      } else {
+        this.$message.error('暂无文件');
+      }
     },
     downResourse() {
       if (this.projectList.length > 0) {
-        window.open(`/api/project/getAdminProjectZip?projectClass=${this.project.projectClass}`);
+        window.open(`/api/leader/getAdminProjectZip?projectClass=${this.project.projectClass}`);
       } else {
         this.$message.error('暂无文件');
       }
@@ -351,8 +355,8 @@ export default {
       this.rejectShow = true;
     },
     download(row) {
-      let data1 = encodeURI(row.application);
-      let data2 = encodeURI(row.material);
+      let data1 = encodeURIComponent(row.application);
+      let data2 = encodeURIComponent(row.material);
       window.open(`/api/project/zipfileDownload?fileNames=${data1},${data2}`);
     },
     ensuerReject() {

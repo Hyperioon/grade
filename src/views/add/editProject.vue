@@ -219,6 +219,7 @@
                    action="api/fileUpload/"
                    accept=".java,.bmp,.jpg,.jpeg,.png,.gif,.ppt,.pptx,.PPT,.PPTX,.doc,.DOC,.docx,.DOCX,.xls,.xlsx,.XLS,.XLSX,.pdf,.PDF,.txt,.TXT,.zip,.ZIP,.rar,.RAR"
                    :data="uploadData"
+                   :before-remove="zhengmingBefore"
                    :on-remove="handleRemove"
                    :on-success='fileUpload'
                    :on-error='uploadError'
@@ -239,9 +240,8 @@
       </el-form-item>
 
       <el-form-item class="submit">
-        <el-button @click="onSubmit(0)">保存草稿</el-button>
         <el-button type="primary"
-                   @click="onSubmit(1)">提交审批</el-button>
+                   @click="onSubmit(2)">确认</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -257,6 +257,8 @@ export default {
   data() {
     return {
       limitnum: 1,
+      changeInit: false,
+      changeSign: false,
       userList: [],
       applyUser: [],
       shenbaoFile: [],
@@ -294,6 +296,11 @@ export default {
       uploadFiles: []
     };
   },
+  watch: {
+    'project.name'() {
+      this.changename = false;
+    }
+  },
   methods: {
     getAllUser() {
       getAllLdapUsers().then(res => {
@@ -303,8 +310,9 @@ export default {
         }
       })
     },
-    uploadError(error) {
-      this.$message.error(error);
+    uploadError(error, file, fileList) {
+      console.log(file, fileList)
+      // this.$message.error(error);
     },
     addApply() {
       if (this.project.projectClass === 1 && this.applyList.length > 4) {
@@ -384,24 +392,27 @@ export default {
     },
     fileUpload(file, fileList) {
       if (file.successSign) {
-        console.log(fileList)
         this.uploadFiles.push(fileList);
         this.changename = false;
       } else {
-        this.uploadError(file.message);
+        this.uploadFiles.push(fileList);
+        this.uploadFiles.splice(-1, 1);
+        this.$message.error(file.message);
       }
     },
     shenbaoUpload(file, fileList) {
       if (file.successSign) {
-        console.log(fileList)
         this.shenbaoFile.push(fileList);
-        console.log(this.shenbaoFile)
         this.changename = false;
       } else {
-        this.uploadError(file.message);
+        this.shenbaoFile.push(fileList);
+        this.shenbaoFile.splice(-1, 1);
+        this.$message.error(file.message);
       }
     },
-
+    zhengmingBefore() {
+      console.log(1)
+    },
     handleRemove(file, fileList) {
       this.uploadFiles = fileList;
     },
@@ -409,14 +420,17 @@ export default {
       this.shenbaoFile = fileList;
     },
     changeName() {
-      this.changename = true;
-      this.uploadFiles = [];
-      this.shenbaoFile = [];
+      if (this.changeInit) {
+        this.changename = true;
+        this.uploadFiles = [];
+        this.shenbaoFile = [];
+      }
     },
     getInfo(id) {
       getProjectInfo({ projectId: id }).then(res => {
         if (res.successSign) {
           Object.assign(this.project, res.result);
+          this.changeInit = true;  // 初始化标记
           // this.applyUser = this.project.applyUser.split(',');
           let index = this.project.contact.indexOf('-');
           // 报奖联系人信息拼接
@@ -453,7 +467,6 @@ export default {
           let shenbaoArr = this.project.application.split(',');
           for (let i = 0; i < shenbaoArr.length; i++) {
             let shenbaoObj = {}
-
             shenbaoObj.name = shenbaoArr[i];
             let index = shenbaoArr[i].indexOf('/');
             shenbaoObj.name = shenbaoArr[i].slice(index + 1);

@@ -6,11 +6,15 @@ import Cookies from 'js-cookie';
 export default {
   //get请求
   get(url, param) {
+    let t = {
+      t: Math.random()
+    }
+    let params = Object.assign(param || {}, t);
     return new Promise((resolve, reject) => {
       axios({
         method: 'get',
         url: url,
-        params: param,
+        params: params,
       }).then(res => {
         if (res.data.resultCode !== '200') {
           if (!res.data.message) {
@@ -36,11 +40,15 @@ export default {
   },
   //post请求
   post(url, param) {
+    let t = {
+      t: Math.random()
+    }
+    let params = Object.assign(param || {}, t);
     return new Promise((resolve, reject) => {
       axios({
         method: 'post',
         url: url,
-        data: qs.stringify(param),
+        data: qs.stringify(params),
         withCredentials: true,
       }).then(res => {
         if (res.data.resultCode !== '200') {

@@ -156,7 +156,11 @@ export default {
   },
   methods: {
     onExport() {
-      window.open(`/api/project/exportMyProjectExcel?applyDepartment=${this.project.applyDepartment}&projectClass=${this.project.projectClass}&status=${this.project.status}`);
+      if (this.myProjectList.length > 0) {
+        window.open(`/api/project/exportMyProjectExcel?applyDepartment=${this.project.applyDepartment}&projectClass=${this.project.projectClass}&status=${this.project.status}`);
+      } else {
+        this.$message.error('暂无文件');
+      }
     },
     onSubmit(row) {
       row.action = 1;
@@ -238,8 +242,8 @@ export default {
       this.$router.push({ path: '/projectDetail', query: { id: row.id } });
     },
     download(row) {
-      let data1 = encodeURI(row.application);
-      let data2 = encodeURI(row.material);
+      let data1 = encodeURIComponent(row.application);
+      let data2 = encodeURIComponent(row.material);
       window.open(`/api/project/zipfileDownload?fileNames=${data1},${data2}`);
     },
   },

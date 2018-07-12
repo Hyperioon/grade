@@ -234,9 +234,7 @@
         </el-tooltip>
         <p>上传获奖证书、专利证书等扫描件，没有可不传</p>
 
-
         <p>如需重新上传申报书和证明材料， 请删除所有材料后再上传</p>
-
 
       </el-form-item>
 
@@ -271,6 +269,7 @@ export default {
   },
   data() {
     return {
+      changeInit: false,
       dialogVisible: false,
       limitnum: 1,
       userList: [],
@@ -403,6 +402,8 @@ export default {
         this.uploadFiles.push(fileList);
         this.changename = false;
       } else {
+        this.uploadFiles.push(fileList);
+        this.uploadFiles.splice(-1, 1);
         this.uploadError(file.message);
       }
     },
@@ -411,6 +412,8 @@ export default {
         this.shenbaoFile.push(fileList);
         this.changename = false;
       } else {
+        this.shenbaoFile.push(fileList);
+        this.shenbaoFile.splice(-1, 1);
         this.uploadError(file.message);
       }
     },
@@ -423,14 +426,17 @@ export default {
       this.shenbaoFile = fileList;
     },
     changeName() {
-      this.changename = true;
-      this.uploadFiles = [];
-      this.shenbaoFile = [];
+      if (this.changeInit) {
+        this.changename = true;
+        this.uploadFiles = [];
+        this.shenbaoFile = [];
+      }
     },
     getInfo(id) {
       getProjectInfo({ projectId: id }).then(res => {
         if (res.successSign) {
           Object.assign(this.project, res.result);
+          this.changeInit = true;  // 初始化标记
           // this.applyUser = this.project.applyUser.split(',');
           let index = this.project.contact.indexOf('-');
           // 报奖联系人信息拼接
@@ -563,7 +569,8 @@ export default {
             }
           })
         }
-      } else {
+      }
+      else {
         if (this.project.projectClass === 2) {
           this.$message.error('请重新上传申报书，证明材料！');
         } else {

@@ -1,11 +1,12 @@
 <template>
   <div class="status-manage">
     <el-button @click="tongbu">同步用户信息</el-button>
+    <el-button @click="fasong">发送部门审批通知</el-button>
   </div>
 </template>
 
 <script>
-import {insertUserList} from '@/api/api'
+import { insertUserList, sendDepartmentLeader } from '@/api/api'
 export default {
   name: 'firstTrial',
   components: {
@@ -17,6 +18,13 @@ export default {
           this.$message.success(res.message);
         }
       })
+    },
+    fasong() {
+      sendDepartmentLeader().then(res => {
+        if (res.successSign) {
+          this.$message.success(res.message);
+        }
+      })
     }
   }
 
@@ -24,7 +32,7 @@ export default {
 </script>
 
 <style>
-.status-manage{
+.status-manage {
   padding: 40px;
 }
 </style>

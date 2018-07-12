@@ -13,7 +13,6 @@ const expertManage = r => require.ensure([], () => r(require('./views/manage/exp
 const fenpei = r => require.ensure([], () => r(require('./views/myProject/fenpei.vue')));
 const createProject = r => require.ensure([], () => r(require('./views/add/createProject.vue')));
 const editProject = r => require.ensure([], () => r(require('./views/add/editProject.vue')));
-const alloted = r => require.ensure([], () => r(require('./views/myProject/alloted.vue')));
 const zhongping = r => require.ensure([], () => r(require('./views/myProject/zhongping.vue')));
 const yichuping = r => require.ensure([], () => r(require('./views/myProject/yichuping.vue')));
 const chuping = r => require.ensure([], () => r(require('./views/myProject/chuping.vue')));
@@ -83,7 +82,6 @@ let routes = [
             { path: '/zhongpingDafen', component: zhongpingDafen, name: '终评打分情况', hidden: true },
             { path: '/yichuping', component: yichuping, name: '已初评项目', hidden: true },
             { path: '/fenpei', component: fenpei, name: '待分配项目', hidden: true },
-            { path: '/alloted', component: alloted, name: '已分配项目', hidden: true },
             { path: '/zhongping', component: zhongping, name: '终评项目', hidden: true },
             { path: '/pingjiang', component: pingjiang, name: '评奖项目', hidden: true },
             { path: '/projectDetail', component: projectDetail, name: '项目详情', hidden: true },
@@ -98,7 +96,7 @@ let routes = [
         manage: true,
         iconCls: 'fa fa-id-card-o',
         children: [
-            { path: '/tongbu', component: tongbu, name: '同步oa信息' },
+            { path: '/tongbu', component: tongbu, name: '系统管理' },
             { path: '/userManage', component: userManage, name: '修改用户信息' },
             { path: '/addUser', component: addUser, name: '添加外部人员' },
             { path: '/expertManage', component: expertManage, name: '专家库' },

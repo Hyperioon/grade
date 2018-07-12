@@ -150,3 +150,11 @@ export const getExpertProjectList = param => {
 export const closeProjectApply = param => {
   return req.post(`${base}/api/project/closeProjectApply`, param).then(res => res.data);
 }
+// 创新项目审批个数
+export const innovateApproveNumber = param => {
+  return req.post(`${base}/api/project/innovateApproveNumber`, param).then(res => res.data);
+}
+// 通知审批
+export const sendDepartmentLeader = param => {
+  return req.post(`${base}/api/project/sendDepartmentLeader`, param).then(res => res.data);
+}

@@ -63,7 +63,7 @@ export default {
   },
   methods: {
     download(name) {
-      let data = encodeURI(name);
+      let data = encodeURIComponent(name);
       window.open(`/api/download?fileName=${data}`);
     },
     isClosed(value) {
