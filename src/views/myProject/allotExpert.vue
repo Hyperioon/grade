@@ -157,7 +157,7 @@ export default {
   methods: {
     onExport() {
       if (this.myProjectList.length > 0) {
-        window.open(`/api/project/exportMyProjectExcel?applyDepartment=${this.project.applyDepartment}&projectClass=${this.project.projectClass}&status=${this.project.status}`);
+        window.open(`/api/project/exportMyProjectExcel?applyDepartment=${this.project.applyDepartment}&projectClass=${this.project.projectClass}&projectName=${this.project.projectName}&status=${this.project.status}`);
       } else {
         this.$message.error('暂无文件');
       }

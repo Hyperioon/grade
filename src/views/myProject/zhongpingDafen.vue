@@ -5,9 +5,7 @@
                :model="project"
                class="demo-form-inline">
         <el-form-item label="类型">
-          <el-select clearable
-                     @change="getAllProjectList"
-                     v-model="project.projectClass"
+          <el-select v-model="project.projectClass"
                      placeholder="类型">
             <el-option label="创新项目奖"
                        :value="2"></el-option>
@@ -15,7 +13,22 @@
                        :value="1"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="部门">
+          <el-select clearable
+                     v-model="project.applyDepartment"
+                     placeholder="请选择申报部门">
+            <el-option v-for="item in allDepartment"
+                       :key="item.description"
+                       :label="item.description"
+                       :value="item.description">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="项目名称">
+          <el-input v-model="project.projectName"></el-input>
+        </el-form-item>
         <el-form-item>
+          <el-button @click="getAllProjectList">查询</el-button>
           <el-button type="primary"
                      @click="onExport">导出表格</el-button>
           <!-- <el-button type="primary"
@@ -24,7 +37,7 @@
       </el-form>
       <el-table :data="projectList"
                 border
-                v-show="project.projectClass === 2"
+                v-show="projectClass === 2"
                 v-loading="listLoading"
                 style="width: 100%">
         <el-table-column prop="realname"
@@ -108,7 +121,7 @@
       </el-table>
       <el-table :data="projectList"
                 border
-                v-show="project.projectClass === 1"
+                v-show="projectClass === 1"
                 v-loading="listLoading"
                 style="width: 100%">
         <el-table-column prop="realname"
@@ -235,9 +248,12 @@ export default {
       project: {
         projectClass: 2,
         pageNo: 1,
+        projectName: '',
+        applyDepartment: '',
         action: 2
       },
       projectList: [],
+      projectClass: 2
     };
   },
   methods: {
@@ -335,6 +351,7 @@ export default {
     },
     getAllProjectList() {
       this.listLoading = true;
+      this.projectClass = this.project.projectClass;
       getAdminProjectList(this.project).then(res => {
         if (res.successSign && res.result) {
           this.projectList = res.result.slice(res.pageVo.pageStartRow, res.pageVo.pageEndRow);

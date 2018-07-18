@@ -14,7 +14,20 @@
                        value="1"></el-option>
           </el-select>
         </el-form-item>
-
+        <el-form-item label="部门">
+          <el-select clearable
+                     v-model="project.applyDepartment"
+                     placeholder="请选择申报部门">
+            <el-option v-for="item in allDepartment"
+                       :key="item.description"
+                       :label="item.description"
+                       :value="item.description">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="项目名称">
+          <el-input v-model="project.projectName"></el-input>
+        </el-form-item>
         <el-form-item>
           <el-button @click="getAllProjectList">查询</el-button>
           <el-button type="primary"
@@ -157,6 +170,7 @@ export default {
       project: {
         applyDepartment: '',
         projectClass: '',
+        projectName: '',
         status: 6,
         pageNo: 1,
         action: 2
@@ -167,7 +181,7 @@ export default {
   methods: {
     onExport() {
       if (this.projectList.length > 0) {
-        window.open(`/api/leader/getExpertProjectListByCondition/?projectClass=${this.project.projectClass}&action=3`);
+        window.open(`/api/leader/getExpertProjectListByCondition/?projectClass=${this.project.projectClass}&projectName=${this.project.projectName}&action=1`);
       } else {
         this.$message.error('暂无文件');
       }

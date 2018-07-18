@@ -14,6 +14,9 @@
                        :value="1"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="项目名称">
+          <el-input v-model="project.projectName"></el-input>
+        </el-form-item>
         <el-form-item>
           <el-button @click="getProjectList">查询</el-button>
           <el-button type="primary"
@@ -131,6 +134,7 @@ export default {
         applyDepartment: '',
         projectClass: '',
         status: '',
+        projectName: '',
         pageNo: 1
       },
       myProjectList: []
@@ -139,7 +143,7 @@ export default {
   methods: {
     onExport() {
       if (this.myProjectList.length > 0) {
-        window.open(`/api/project/exportMyProjectExcel?applyDepartment=${this.project.applyDepartment}&projectClass=${this.project.projectClass}&status=${this.project.status}&myProject=0`);
+        window.open(`/api/project/exportMyProjectExcel?applyDepartment=${this.project.applyDepartment}&projectClass=${this.project.projectClass}&projectName=${this.project.projectName}&status=${this.project.status}&myProject=0`);
       } else {
         this.$message.error('暂无文件');
       }
@@ -214,7 +218,7 @@ export default {
       }
     },
     getProjectList() {
-      getMyProjectList({ projectClass: this.project.projectClass }).then(res => {
+      getMyProjectList({ projectClass: this.project.projectClass,projectName: this.project.projectName}).then(res => {
         if (res.successSign && res.result) {
           this.myProjectList = res.result;
           for (let item of this.myProjectList) {
