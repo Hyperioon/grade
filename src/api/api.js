@@ -158,3 +158,7 @@ export const innovateApproveNumber = param => {
 export const sendDepartmentLeader = param => {
   return req.post(`${base}/api/project/sendDepartmentLeader`, param).then(res => res.data);
 }
+// 发送专家初评短信
+export const sendJuniorExpert = param => {
+  return req.post(`${base}/api/expert/sendJuniorExpert`, param).then(res => res.data);
+}

@@ -4,11 +4,13 @@
                @click="tongbu">同步用户信息</el-button>
     <el-button :loading="fasongLoding"
                @click="fasong">发送部门审批短信</el-button>
+    <el-button :loading="chupingLoding"
+               @click="chuping">发送专家初评短信</el-button>
   </div>
 </template>
 
 <script>
-import { insertUserList, sendDepartmentLeader } from '@/api/api'
+import { insertUserList, sendDepartmentLeader, sendJuniorExpert } from '@/api/api'
 export default {
   name: 'firstTrial',
   components: {
@@ -16,7 +18,8 @@ export default {
   data() {
     return {
       fasongLoding: false,
-      tongbuLoding: false
+      tongbuLoding: false,
+      chupingLoding: false
     }
   },
   methods: {
@@ -51,6 +54,26 @@ export default {
           if (res.successSign) {
             this.$message.success(res.message);
             this.fasongLoding = false;
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消发送'
+        });
+      });
+    },
+    chuping() {
+      this.$confirm('确认专家初评短信?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.chupingLoding = true;
+        sendJuniorExpert().then(res => {
+          if (res.successSign) {
+            this.$message.success(res.message);
+            this.chupingLoding = false;
           }
         })
       }).catch(() => {
