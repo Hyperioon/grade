@@ -65,7 +65,7 @@
               <!-- 专家 -->
               <el-menu-item v-if="user.expert && user.expert.juniorExpert === 1"
                             index="/chuping"
-                            @click="$router.push('/chuping')">待初评项目</el-menu-item>
+                            @click="$router.push('/chuping')">初评项目</el-menu-item>
               <el-menu-item v-if="user.role === 3"
                             index="/expertDafen"
                             @click="$router.push('/expertDafen')">初评打分情况</el-menu-item>
@@ -74,7 +74,7 @@
                             @click="$router.push('/yichuping')">已初评项目</el-menu-item>
               <el-menu-item v-if="user.expert && user.expert.finalExpert === 1"
                             index="/zhongping"
-                            @click="$router.push('/zhongping')">待终评项目</el-menu-item>
+                            @click="$router.push('/zhongping')">终评项目</el-menu-item>
               <el-menu-item v-if="user.role === 3"
                             index="/zhongpingDafen"
                             @click="$router.push('/zhongpingDafen')">终评打分情况</el-menu-item>
@@ -87,7 +87,7 @@
               <!-- 公司领导 -->
               <el-menu-item v-if="user.role === 2"
                             index="/zhongping"
-                            @click="$router.push('/zhongping')">待终评</el-menu-item>
+                            @click="$router.push('/zhongping')">终评项目</el-menu-item>
               <!-- <el-menu-item v-if="user.role === 2"
                             index="/allProject"
                             @click="$router.push('/allProject')">公司全部项目</el-menu-item> -->

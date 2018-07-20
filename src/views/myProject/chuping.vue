@@ -211,7 +211,7 @@ export default {
   methods: {
     onExport() {
       if (this.projectList.length > 0) {
-        window.open(`/api/expert/getExpertProjectListByCondition?projectClass=${this.project.projectClass}&projectName=${this.project.projectName}&action=1&pageNo=1`);
+        window.open(`/api/expert/getExpertProjectListByCondition?projectClass=${this.project.projectClass}&projectName=${this.project.projectName}&applyDepartment=${this.project.applyDepartment}&action=1&pageNo=1`);
       } else {
         this.$message.error('暂无文件');
       }

@@ -181,7 +181,7 @@ export default {
   methods: {
     onExport() {
       if (this.projectList.length > 0) {
-        window.open(`/api/leader/getExpertProjectListByCondition/?projectClass=${this.project.projectClass}&projectName=${this.project.projectName}&action=1`);
+        window.open(`/api/leader/getExpertProjectListByCondition/?projectClass=${this.project.projectClass}&projectName=${this.project.projectName}&applyDepartment=${this.project.applyDepartment}&action=1`);
       } else {
         this.$message.error('暂无文件');
       }
@@ -243,7 +243,7 @@ export default {
       }
       batchGrade(param).then(res => {
         if (res.successSign) {
-          this.$message.success('操作成功～');
+          this.$message.success('操作成功');
           this.getAllProjectList();
         }
       })
@@ -259,6 +259,11 @@ export default {
             if (item.finalStatus !== 2) {
               this.oprerate = true;
             }
+            if (item.leaderScore === 'noScore') {
+              console.log('hehe')
+              item.leaderScore = '';
+            }
+
           }
           this.total = res.pageVo.totalCount;
         } else {
