@@ -70,7 +70,7 @@
                     size="small"
                     min="0"
                     type="number"
-                    @keyup.native="scope.row.rating =  scope.row.rating.replace(/[^\d]/g, '')"
+                    @keyup.native="row.rating = row.rating.replace(/[^\d]/g, '')"
                     @blur="dafen(scope.row)"
                     v-model="scope.row.rating"></el-input>
         </template>
@@ -198,6 +198,13 @@ export default {
         if (rating % 1 !== 0) {
           this.$message.error('请输入整数！');
         }
+      }
+    },
+    keyUp(row) {
+      let reg = /[^\d]/g;
+      if (reg.test(row.rating)) {
+        this.$message.error('请输入整数');
+        // row.rating = row.rating.replace(/[^\d]/g, '')
       }
     },
     getProject() {

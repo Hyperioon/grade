@@ -84,7 +84,7 @@ export default {
       updateUser(this.userInfo).then(res => {
         if (res.successSign) {
           this.$router.push('/userManage');
-          this.$message.success('修改成功！');
+          this.$message.success('修改成功');
         }
       })
     }

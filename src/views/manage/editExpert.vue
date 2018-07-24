@@ -125,7 +125,7 @@ export default {
       updateExpert(this.expert).then(res => {
         if (res.successSign) {
           this.$router.push('/expertManage');
-          this.$message.success('修改成功！');
+          this.$message.success('修改成功');
         }
       })
     }

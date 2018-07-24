@@ -58,7 +58,7 @@
         </el-table-column>
         <el-table-column align="left"
                          width="360"
-                         label="申报人">
+                         label="主要完成人">
           <template scope="scope">
             <div v-for="item in scope.row.applyUser">
               <div>{{item}}</div>

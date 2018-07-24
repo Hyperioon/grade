@@ -70,7 +70,7 @@
         </el-table-column>
         <el-table-column prop="name"
                          align="center"
-                         label="申报人">
+                         label="主要完成人">
         </el-table-column>
         <el-table-column prop="name"
                          align="center"

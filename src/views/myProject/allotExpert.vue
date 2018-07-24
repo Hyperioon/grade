@@ -77,7 +77,7 @@
         <el-table-column prop="applyUser"
                          align="center"
                          width="340"
-                         label="申报人">
+                         label="主要完成人">
         </el-table-column>
         <el-table-column prop="field"
                          align="center"

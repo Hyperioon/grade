@@ -19,7 +19,7 @@
                            align="center">
           </el-table-column>
           <el-table-column prop="type"
-                           label="申报人"
+                           label="主要完成人"
                            align="center">
           </el-table-column>
           <el-table-column prop="name"
@@ -50,7 +50,7 @@
                            align="center">
           </el-table-column>
           <el-table-column prop="type"
-                           label="申报人"
+                           label="主要完成人"
                            align="center">
           </el-table-column>
           <el-table-column prop="name"
@@ -81,7 +81,7 @@
                            align="center">
           </el-table-column>
           <el-table-column prop="type"
-                           label="申报人"
+                           label="主要完成人"
                            align="center">
           </el-table-column>
           <el-table-column prop="name"
@@ -112,7 +112,7 @@
                            align="center">
           </el-table-column>
           <el-table-column prop="type"
-                           label="申报人"
+                           label="主要完成人"
                            align="center">
           </el-table-column>
           <el-table-column prop="name"
@@ -143,7 +143,7 @@
                            align="center">
           </el-table-column>
           <el-table-column prop="type"
-                           label="申报人"
+                           label="主要完成人"
                            align="center">
           </el-table-column>
           <el-table-column prop="name"
@@ -174,7 +174,7 @@
                            align="center">
           </el-table-column>
           <el-table-column prop="type"
-                           label="申报人"
+                           label="主要完成人"
                            align="center">
           </el-table-column>
           <el-table-column prop="name"

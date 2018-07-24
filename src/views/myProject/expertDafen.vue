@@ -27,6 +27,19 @@
         <el-form-item label="项目名称">
           <el-input v-model="project.projectName"></el-input>
         </el-form-item>
+        <el-form-item label="状态">
+          <el-select v-model="project.scoreStatus"
+                     placeholder="状态">
+            <el-option label="请选择打分状态"
+                       :value="3"></el-option>
+            <el-option label="未打分"
+                       :value="0"></el-option>
+            <el-option label="保存"
+                       :value="1"></el-option>
+            <el-option label="提交"
+                       :value="2"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item>
           <el-button @click="getAllProjectList">查询</el-button>
           <el-button type="primary"
@@ -227,7 +240,7 @@
         <el-table-column fixed="right"
                          label="操作"
                          align="center"
-                         width="3">
+                         width="300">
           <template slot-scope="scope">
             <el-button @click.native.prevent="detail(scope.row)"
                        type="text"
@@ -296,6 +309,7 @@ export default {
         projectName: '',
         applyDepartment: '',
         pageNo: 1,
+        scoreStatus: 3,
         action: 2
       },
       projectList: [],
@@ -306,7 +320,7 @@ export default {
   methods: {
     onExport() {
       if (this.projectList.length > 0) {
-        window.open(`/api/expert/getAdminProjectListByCondition?projectClass=${this.project.projectClass}&projectName=${this.project.projectName}&applyDepartment=${this.project.applyDepartment}&action=1&pageNo=1`);
+        window.open(`/api/expert/getAdminProjectListByCondition?projectClass=${this.project.projectClass}&projectName=${this.project.projectName}&applyDepartment=${this.project.applyDepartment}&scoreStatus=${this.project.scoreStatus}&action=1&pageNo=1`);
       } else {
         this.$message.error('暂无文件');
       }

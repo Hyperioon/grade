@@ -60,7 +60,7 @@
         </el-table-column>
         <el-table-column align="left"
                          width="360"
-                         label="申报人">
+                         label="主要完成人">
           <template scope="scope">
             <div v-for="item in scope.row.applyUser">
               <div>{{item}}</div>
@@ -107,11 +107,11 @@
                          align="center"
                          width="200">
           <template slot-scope="scope">
-            <el-input placeholder="输入1-100的整数"
+            <el-input placeholder="输入0-100的整数"
                       @blur="dafen(scope.row)"
                       type="email"
                       v-show="scope.row.finalStatus !== 2"
-                      @keyup.native="scope.row.leaderScore =  scope.row.leaderScore.replace(/[^\d]/g, '')"
+                      @keyup.native="row.rating = row.rating.replace(/[^\d]/g, '')"
                       v-model="scope.row.leaderScore"
                       size="small"></el-input>
             <span v-show="scope.row.finalStatus === 2">{{scope.row.leaderScore}}</span>
@@ -191,6 +191,13 @@ export default {
         window.open(`/api/leader/getExpertProjectListByCondition?projectClass=${this.project.projectClass}&action=3`);
       } else {
         this.$message.error('暂无文件');
+      }
+    },
+    keyUp(row) {
+      let reg = /[^\d]/g;
+      if (reg.test(row.rating)) {
+        this.$message.error('请输入整数');
+        // row.rating = row.rating.replace(/[^\d]/g, '')
       }
     },
     handleCurrentChange(val) {
