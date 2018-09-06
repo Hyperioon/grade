@@ -72,8 +72,29 @@
                          width="140"
                          label="领域">
         </el-table-column>
+        <el-table-column prop="expertFinalScore"
+                         align="center"
+                         width="100"
+                         label="初评分数">
+        </el-table-column>
+        <el-table-column label="打分"
+                         fixed="right"
+                         align="center"
+                         width="200">
+          <template slot-scope="scope">
+            <el-input placeholder="输入0-100的整数"
+                      @blur="dafen(scope.row)"
+                      type="email"
+                      v-show="scope.row.finalStatus !== 2"
+                      @keyup.native="row.rating = row.rating.replace(/[^\d]/g, '')"
+                      v-model="scope.row.leaderScore"
+                      size="small"></el-input>
+            <span v-show="scope.row.finalStatus === 2">{{scope.row.leaderScore}}</span>
+          </template>
+        </el-table-column>
 
         <el-table-column label="操作"
+                         fixed="right"
                          align="center"
                          width="200">
           <template slot-scope="scope">
@@ -100,21 +121,6 @@
                        size="small">
               下载
             </el-button>
-          </template>
-        </el-table-column>
-        <el-table-column fixed="right"
-                         label="打分"
-                         align="center"
-                         width="200">
-          <template slot-scope="scope">
-            <el-input placeholder="输入0-100的整数"
-                      @blur="dafen(scope.row)"
-                      type="email"
-                      v-show="scope.row.finalStatus !== 2"
-                      @keyup.native="row.rating = row.rating.replace(/[^\d]/g, '')"
-                      v-model="scope.row.leaderScore"
-                      size="small"></el-input>
-            <span v-show="scope.row.finalStatus === 2">{{scope.row.leaderScore}}</span>
           </template>
         </el-table-column>
       </el-table>
@@ -176,6 +182,7 @@ export default {
         action: 2
       },
       projectList: [],
+      erroTag: false
     };
   },
   methods: {
@@ -196,7 +203,8 @@ export default {
     keyUp(row) {
       let reg = /[^\d]/g;
       if (reg.test(row.rating)) {
-        this.$message.error('请输入整数');
+        this.$message.error('请输入整数'); 3
+        this.erroTag = true;
         // row.rating = row.rating.replace(/[^\d]/g, '')
       }
     },
@@ -233,9 +241,9 @@ export default {
       let ids = [];
       let projectIds = [];
       for (let item of this.projectList) {
-        if (!item.leaderScore) {
-          item.leaderScore = 'noScore'
-        }
+        // if (!item.leaderScore) {
+        //   item.leaderScore = 'noScore'
+        // }
         if (item.finalStatus !== 2) {
           arr.push(item.leaderScore);
           ids.push(item.id);
@@ -248,12 +256,14 @@ export default {
         leaderScores: arr.join(','),
         finalStatus: action
       }
-      batchGrade(param).then(res => {
-        if (res.successSign) {
-          this.$message.success('操作成功');
-          this.getAllProjectList();
-        }
-      })
+      if (!erroTag) {
+        batchGrade(param).then(res => {
+          if (res.successSign) {
+            this.$message.success('操作成功');
+            this.getAllProjectList();
+          }
+        })
+      }
     },
     getAllProjectList() {
       zhongpingList(this.project).then(res => {
@@ -266,10 +276,10 @@ export default {
             if (item.finalStatus !== 2) {
               this.oprerate = true;
             }
-            if (item.leaderScore === 'noScore') {
-              console.log('hehe')
-              item.leaderScore = '';
-            }
+            // if (item.leaderScore === 'noScore') {
+            //   console.log('hehe')
+            //   item.leaderScore = '';
+            // }
 
           }
           this.total = res.pageVo.totalCount;

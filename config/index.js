@@ -7,8 +7,10 @@ module.exports = {
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
-    productionSourceMap: true,
+    // assetsPublicPath: '/',
+    assetsPublicPath: './',
+    // productionSourceMap: true,
+    productionSourceMap: false,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
     // Before setting to `true`, make sure to:
@@ -29,8 +31,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://172.18.9.24:7080',  //ting
-        // target: 'http://172.28.22.66:7080/',  // ceshi
+        // target: 'http://172.18.9.24:7080',  //ting
+        target: 'http://172.28.22.66:7080/',  // ceshi
         // target: 'http://192.168.25.1:7080/',  // liang
         // target: 'http://172.18.9.125:7080/',  // liang
         // target:'http://172.30.13.79:7080',
